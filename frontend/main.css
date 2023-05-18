@@ -1,4 +1,7 @@
 /* General styles */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
 * {
   margin: 0;
   padding: 0;
@@ -6,13 +9,15 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   line-height: 1.6;
+  background-color: #fff;
+  color: #333;
 }
 
 button {
-  //background-color: #333;
-  //color: #fff;
+  background-color: #0189ac;
+  color: #fff;
   border: none;
   border-radius: 1rem;
   padding: 1rem 1.5rem;
@@ -20,9 +25,14 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  background-color: #006e8f;
+  color: #fff;
+}
+
 /* Header */
 header {
-  background-color: #36566d;
+  background-color: #0189ac;
   padding: 1rem;
 }
 
@@ -66,27 +76,15 @@ main {
 
 /* Home view */
 
-/*
-#home-view {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 4rem;
-  align-items: center;
-}
-*/
-
 #home-view button {
-  //background-color: #333;
-  //color: #fff;
-  border: none;
+  border-radius: 1rem;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
   cursor: pointer;
 }
 
 #home-view button:hover {
-  //background-color: #555;
+  background-color: #006e8f;
 }
 
 #top-players {
@@ -123,16 +121,13 @@ main {
 .image-option button {
   display: block;
   margin-top: 1rem;
-  //background-color: #333;
-  //color: #fff;
-  border: none;
+  border-radius: 1rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  border-radius: 1rem;
 }
 
 .image-option button:hover {
-  background-color: #555;
+  background-color: #006e8f;
 }
 
 /* Leaderboard view */
@@ -167,15 +162,13 @@ th {
 }
 
 #login-form button {
-  //background-color: #333;
-  //color: #fff;
-  border: none;
+  border-radius: 1rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
 #login-form button:hover {
-  //background-color: #555;
+  background-color: #006e8f;
 }
 
 /* Light/Dark theme */
@@ -185,11 +178,11 @@ th {
 }
 
 .light-theme button {
-  background-color: #36566d;
+  background-color: #0189ac;
   color: #fff;
 }
 .light-theme button:hover {
-  background-color: #0189ac;
+  background-color: #006e8f;
   color: #fff;
 }
 

@@ -7,6 +7,30 @@ document.getElementById("nav-theme").addEventListener("click", toggleTheme);
 
 */
 
+document.addEventListener("DOMContentLoaded", () => {
+  const themeToggleBtn = document.getElementById("nav-theme");
+
+  themeToggleBtn.addEventListener("click", () => {
+    const body = document.querySelector("body");
+
+    if (body.classList.contains("light-theme")) {
+      body.classList.remove("light-theme");
+      body.classList.add("dark-theme");
+      themeToggleBtn.innerHTML =
+        '<span class="material-icons">nights_stay</span>';
+      themeToggleBtn.classList.remove("light-theme-icon");
+      themeToggleBtn.classList.add("dark-theme-icon");
+    } else {
+      body.classList.remove("dark-theme");
+      body.classList.add("light-theme");
+      themeToggleBtn.innerHTML = '<span class="material-icons">wb_sunny</span>';
+      themeToggleBtn.classList.remove("dark-theme-icon");
+      themeToggleBtn.classList.add("light-theme-icon");
+    }
+  });
+});
+
+/*
 const toggleTheme = () => {
   const body = document.body;
 
@@ -19,7 +43,10 @@ const toggleTheme = () => {
   }
 };
 
+
 document.getElementById("nav-theme").addEventListener("click", toggleTheme);
+
+*/
 
 const showSection = (sectionId) => {
   // Hide all sections
