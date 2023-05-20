@@ -16,7 +16,7 @@ body {
 }
 
 button {
-  background-color: #0189ac;
+  background-color: #004aad;
   color: #fff;
   border: none;
   border-radius: 1rem;
@@ -26,23 +26,40 @@ button {
 }
 
 button:hover {
-  background-color: #006e8f;
+  background-color: #004aad;
   color: #fff;
 }
 
 /* Header */
 header {
-  background-color: #0189ac;
+  display: flex;
+  flex-direction: row;
+  background-color: #004aad;
   padding: 1rem;
 }
 
+.logocontainer {
+  width: 110px;
+  height: 110px;
+}
+
+.logo {
+  width: inherit;
+  height: inherit;
+  object-fit: fill;
+  border-radius: 10%;
+}
+
 header h1 {
-  color: #fff;
+  color: #f2f2f2;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 3rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
 }
 
 /* Navigation */
+
 nav {
   background-color: #f2f2f2;
   padding: 1rem;
@@ -69,10 +86,17 @@ nav a:hover {
 
 /* Main container */
 main {
-  margin: 2rem auto;
-  width: 90%;
+  margin: 0.5rem auto;
+  width: 100%;
   max-width: 1200px;
 }
+
+.description {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 2rem;
+}
+
 
 /* Home view */
 
@@ -84,7 +108,7 @@ main {
 }
 
 #home-view button:hover {
-  background-color: #006e8f;
+  background-color: #004aad;
 }
 
 #top-players {
@@ -107,7 +131,7 @@ main {
 .image-container {
   display: flex;
   justify-content: space-around;
-  margin-top: 2rem;
+  margin: 2rem;
   gap: 4rem;
 }
 
@@ -127,7 +151,11 @@ main {
 }
 
 .image-option button:hover {
-  background-color: #006e8f;
+  background-color: #004aad;
+}
+
+h2 {
+  margin: 2rem;
 }
 
 /* Leaderboard view */
@@ -168,7 +196,7 @@ th {
 }
 
 #login-form button:hover {
-  background-color: #006e8f;
+  background-color: #004aad;
 }
 
 /* Light/Dark theme */
@@ -178,11 +206,11 @@ th {
 }
 
 .light-theme button {
-  background-color: #0189ac;
+  background-color: #004aad;
   color: #fff;
 }
 .light-theme button:hover {
-  background-color: #006e8f;
+  background-color: #004aad;
   color: #fff;
 }
 
@@ -224,4 +252,9 @@ th {
 /* Hidden class */
 .hidden {
   display: none;
+}
+
+
+coordinates {
+  margin: 4rem;
 }
