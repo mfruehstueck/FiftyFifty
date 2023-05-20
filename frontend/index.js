@@ -1,19 +1,12 @@
-/*
-const toggleTheme = () => {
-  document.body.classList.toggle("dark-theme");
-};
-
-document.getElementById("nav-theme").addEventListener("click", toggleTheme);
-
-*/
-
 document.addEventListener("DOMContentLoaded", () => {
   const themeToggleBtn = document.getElementById("nav-theme");
 
-  themeToggleBtn.addEventListener("click", () => {
+  const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const setTheme = (prefersDark) => {
     const body = document.querySelector("body");
 
-    if (body.classList.contains("light-theme")) {
+    if (prefersDark) {
       body.classList.remove("light-theme");
       body.classList.add("dark-theme");
       themeToggleBtn.innerHTML =
@@ -27,26 +20,19 @@ document.addEventListener("DOMContentLoaded", () => {
       themeToggleBtn.classList.remove("dark-theme-icon");
       themeToggleBtn.classList.add("light-theme-icon");
     }
+  };
+
+  setTheme(prefersDarkScheme.matches);
+
+  themeToggleBtn.addEventListener("click", () => {
+    // Wenn das aktuelle Theme dunkel ist, setzen Sie es auf hell und umgekehrt
+    const body = document.querySelector("body");
+    const currentIsDark = body.classList.contains("dark-theme");
+    setTheme(!currentIsDark);
   });
 });
 
-/*
-const toggleTheme = () => {
-  const body = document.body;
-
-  if (body.classList.contains("light-theme")) {
-    body.classList.remove("light-theme");
-    body.classList.add("dark-theme");
-  } else {
-    body.classList.remove("dark-theme");
-    body.classList.add("light-theme");
-  }
-};
-
-
-document.getElementById("nav-theme").addEventListener("click", toggleTheme);
-
-*/
+//++++++++++++++++++++++++++++
 
 const showSection = (sectionId) => {
   // Hide all sections
@@ -69,9 +55,6 @@ document.getElementById("nav-leaderboard").addEventListener("click", () => {
 document.getElementById("nav-login").addEventListener("click", () => {
   showSection("login-view");
 });
-
-// Show the game view by default
-showSection("game-view");
 
 document.getElementById("quick-game").addEventListener("click", () => {
   showSection("game-view");
