@@ -1,4 +1,4 @@
-import Viewer from "mapillary-js";
+
 
 let containerGameView = document.getElementById("game-view");
 const container = document.createElement('div');
