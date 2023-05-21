@@ -183,6 +183,8 @@ main {
 
 h2 {
   margin: 2rem;
+  text-align: center;
+  font-size: 3rem;
 }
 
 /* Leaderboard view */
@@ -259,7 +261,7 @@ th {
 }
 
 .dark-theme button {
-  background-color: #222;
+  background-color: #222 !important;
   color: #fff;
 }
 
@@ -276,15 +278,23 @@ th {
   border-color: #555;
 }
 
+.dark-theme .image-container1 {
+  background-color: #555;
+}
+
+.dark-theme .image-container2 {
+  background-color: #444;
+}
+
 /* Hidden class */
 .hidden {
   display: none;
 }
 
 
-coordinates {
+/*coordinates {
   margin: 4rem;
-}
+}*/
 
 .buttonOption1 {
   background-color: #e66e24 !important
