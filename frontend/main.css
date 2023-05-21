@@ -128,27 +128,54 @@ main {
 }
 
 /* Game view */
-.image-container {
+.containers{
   display: flex;
-  justify-content: space-around;
-  margin: 2rem;
-  gap: 4rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.image-option img {
+.image-container1 {
+  display: flex;
+  justify-content: space-around;
+  /*margin: 2rem;*/
+  background-color: #f5c09f;
+ /* gap: 4rem; */
+ align-items: center;
+ text-align: center;
+}
+
+.image-container2 {
+  display: flex;
+  justify-content: space-around;
+  /*margin: 2rem;*/
+  background-color: #adc5e5;
+  align-items: center;
+  text-align: center;
+}
+
+.image-option1, .image-option2 {
+  align-items: center;
+  display: block;
+  margin: 0 auto;
+}
+
+.image-option1 img, .image-option2 img {
   max-width: 100%;
   height: auto;
   display: block;
-  border-radius: 1rem;
+  padding: 2.5rem;
+  /*border-radius: 1rem; */
 }
 
-.image-option button {
-  display: block;
-  margin-top: 1rem;
-  border-radius: 1rem;
-  padding: 0.5rem 1rem;
+.image-option1 button, .image-option2 button {
+  margin: 1rem;
+  border-radius: 0%;
+  padding: 1.5rem 10rem;
+  margin: 1rem;
   cursor: pointer;
 }
+
 
 .image-option button:hover {
   background-color: #004aad;
@@ -257,4 +284,8 @@ th {
 
 coordinates {
   margin: 4rem;
+}
+
+.buttonOption1 {
+  background-color: #e66e24 !important
 }
