@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const rounds = require("./rounds.js");
 
 const app = express();
 
@@ -11,6 +12,11 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '..', 'src')));
 //app.use(express.static(path.join(__dirname, '...', 'dist', 'main.js')));
 
+app.get("/StreetViewsPls", function (req, res) {
+  let round = Object.values(rounds);
+  console.log(round[req.query.round - 1]);
+  res.send(round[req.query.round - 1]);
+})
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '..', 'src', 'main.html'));
