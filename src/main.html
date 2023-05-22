@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fifty/Fifty</title>
     <link rel="stylesheet" href="main.css" />
-    <script src="index.js" defer></script>
+    <link
+      href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
+      rel="stylesheet"
+    />
+    <script src="main.js" defer></script>
     <script src="getLocation.js" defer></script>
   </head>
   <body class="light-theme">
@@ -45,11 +49,11 @@
         <h2>Question: Which place is this?</h2>
         <div class="image-container">
           <div class="image-option">
-            <img src="img/bridge_nyc.jpg" alt="Option 1" />
+            <div id="mly1" style="width: 45vw; height: 50vh;"></div>
             <button data-option="1">Option 1</button>
           </div>
           <div class="image-option">
-            <img src="img/eiffel_paris.jpg" alt="Option 2" />
+            <div id="mly2" style="width: 45vw; height: 50vh;"></div>
             <button data-option="2">Option 2</button>
           </div>
         </div>

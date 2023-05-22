@@ -8,11 +8,12 @@ const app = express();
 app.use(bodyParser.json()); 
 
 // Serve static content in directory 'files'
-app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use(express.static(path.join(__dirname, '..', 'src')));
+//app.use(express.static(path.join(__dirname, '...', 'dist', 'main.js')));
 
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '..', 'frontend', 'main.html'));
+  res.sendFile(path.join(__dirname, '..', 'src', 'main.html'));
 });
 
 app.listen(3000)

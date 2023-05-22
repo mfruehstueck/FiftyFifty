@@ -1,4 +1,25 @@
 /*
+  Mapillary Stuff
+*/
+
+import {Viewer} from 'mapillary-js';
+
+const viewer1 = new Viewer({
+  accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
+  container: 'mly1',
+  imageId: '333972098069854',
+});
+
+const viewer2 = new Viewer({
+  accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
+  container: 'mly2',
+  imageId: '2878279885770569',
+});
+
+/*
+
+
+
 const toggleTheme = () => {
   document.body.classList.toggle("dark-theme");
 };
