@@ -35,12 +35,13 @@ header {
   display: flex;
   flex-direction: row;
   background-color: #004aad;
-  padding: 1rem;
+  padding: 0.5rem;
+  gap: 1rem;
 }
 
 .logocontainer {
-  width: 110px;
-  height: 110px;
+  width: 80px;
+  height: 80px;
 }
 
 .logo {
@@ -53,9 +54,8 @@ header {
 header h1 {
   color: #f2f2f2;
   text-align: center;
-  font-size: 3rem;
-  padding-left: 1rem;
-  padding-top: 1rem;
+  font-size: 2.5rem;
+  padding: 0.5rem;
 }
 
 /* Navigation */
@@ -94,7 +94,7 @@ main {
 .description {
   font-size: 1.5rem;
   text-align: center;
-  margin: 2rem;
+  margin: 0.5rem 2rem;
 }
 
 
@@ -127,8 +127,32 @@ main {
   align-items: center;
 }
 
+#footer {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+  padding: 0.8rem;
+  background-color:#adc5e5;
+}
+
 /* Game view */
-.containers{
+
+#score {
+  display: flex;
+  justify-content: right;
+}
+
+#score-id {
+  color: #004aad;
+  font-size: 1.8rem;
+  font-weight: 500;
+  padding: 0.3rem 1rem;
+  background-color:#e66e24;
+  border-radius: 0%;
+}
+
+.containers {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -155,6 +179,7 @@ main {
 }
 
 .image-option1, .image-option2 {
+  max-width: 90%;
   align-items: center;
   display: block;
   margin: 0 auto;
@@ -164,7 +189,7 @@ main {
   max-width: 100%;
   height: auto;
   display: block;
-  padding: 2.5rem;
+  padding: 2rem 2rem 0.5rem 2rem;
   /*border-radius: 1rem; */
 }
 
@@ -172,7 +197,7 @@ main {
   margin: 1rem;
   border-radius: 0%;
   padding: 1.5rem 10rem;
-  margin: 1rem;
+  margin: 0rem 1rem 1rem 1rem;
   cursor: pointer;
 }
 
@@ -182,9 +207,9 @@ main {
 }
 
 h2 {
-  margin: 2rem;
+  margin: 0.3rem;
   text-align: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 /* Leaderboard view */
@@ -286,16 +311,22 @@ th {
   background-color: #444;
 }
 
+.dark-theme #score-id {
+  background-color: #222;
+  color:aliceblue;
+}
+
+
+.dark-theme #footer {
+  background-color: #555;
+  color:#ddd;
+}
+
 /* Hidden class */
 .hidden {
   display: none;
 }
 
-
-/*coordinates {
-  margin: 4rem;
-}*/
-
-.buttonOption1 {
-  background-color: #e66e24 !important
+#buttonOption1 {
+  background-color: #e66e24 
 }

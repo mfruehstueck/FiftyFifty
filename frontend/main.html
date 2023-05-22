@@ -50,28 +50,38 @@
             For each right answer you get points.
             Create an account for free and compete against others!
           </p>
+          <div id="geo-location"></div>
           <button id="quick-game">Start Quick Game</button>
           <button id="home-login">Login</button>
           <h3>Top 3 Players</h3>
           <ol id="top-players">
+
             <!-- Top player list  -->
           </ol>
         </div>
+        <footer>
+          <div id="footer">
+            <p>A project by students of <a href="https://www.fh-campuswien.ac.at/">FH Campus Wien</a></p>
+            <p><a href="mailto:lisa.falter@stud.fh-campuswien.ac.at">Mail us for questions and feedback!</a></p>
+          </div>
+        </footer>
       </section>
+    
       <!-- Game view -->
       <section id="game-view">
+        <div id="score"></div>
         <h2>Which one is Paris?</h2>
         <div class="containers">
         <div class="image-container1">
           <div class="image-option1">
             <img src="img/bridge_nyc.jpg" alt="Option 1" />
-            <button data-option="1"class="buttonOption1">Option 1</button>
+            <button data-option="1"id="buttonOption1">Option 1</button>
           </div>
         </div>
           <div class="image-container2">
           <div class="image-option2">
             <img src="img/eiffel_paris.jpg" alt="Option 2" />
-            <button data-option="2" class="buttonOption2">Option 2</button>
+            <button data-option="2" id="buttonOption2">Option 2</button>
           </div>
         </div>
       </div>

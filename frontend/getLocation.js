@@ -2,7 +2,7 @@ let latitude;
 let longitude;
 
 let coordinates = document.createElement("p");
-let containerHomeView = document.getElementById("home-view");
+let containerHomeView = document.getElementById("geo-location");
 containerHomeView.appendChild(coordinates);
 
     if ("geolocation" in navigator) {
