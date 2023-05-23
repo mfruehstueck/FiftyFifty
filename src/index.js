@@ -29,7 +29,7 @@ function getViews(round) {
         imageId: r['id2'],
       });
       viewer2.deactivateCover();
-      
+
       const questionElement = document.getElementById('question');
       questionElement.innerText = r['question']
       correctAnswer = r['correct'];
@@ -61,6 +61,8 @@ function endRound(answer) {
   if(round > 5) {
     console.log("End of Game");
     console.log("Final Score: " + score + " Points");
+    round = 1;
+    score = 0;
     // Send score to server
     
   } else {
