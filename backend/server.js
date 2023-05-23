@@ -1,14 +1,20 @@
-const http = require('http');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+// Parse urlencoded bodies
+app.use(bodyParser.json()); 
+
+// Serve static content in directory 'files'
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'main.html'));
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+app.listen(3000)
+
+console.log("Server now listening on http://localhost:3000/")

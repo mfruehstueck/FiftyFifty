@@ -1,0 +1,227 @@
+/* General styles */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #fff;
+  color: #333;
+}
+
+button {
+  background-color: #0189ac;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #006e8f;
+  color: #fff;
+}
+
+/* Header */
+header {
+  background-color: #0189ac;
+  padding: 1rem;
+}
+
+header h1 {
+  color: #fff;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* Navigation */
+nav {
+  background-color: #f2f2f2;
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+nav li {
+  margin: 0 1rem;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Main container */
+main {
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+/* Home view */
+
+#home-view button {
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+#home-view button:hover {
+  background-color: #006e8f;
+}
+
+#top-players {
+  margin-top: 2rem;
+}
+
+#top-players li {
+  margin-bottom: 0.5rem;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* Game view */
+.image-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+  gap: 4rem;
+}
+
+.image-option img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 1rem;
+}
+
+.image-option button {
+  display: block;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.image-option button:hover {
+  background-color: #006e8f;
+}
+
+/* Leaderboard view */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Login view */
+#login-form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 2rem auto;
+}
+
+#login-form label,
+#login-form input {
+  margin-bottom: 1rem;
+}
+
+#login-form button {
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+#login-form button:hover {
+  background-color: #006e8f;
+}
+
+/* Light/Dark theme */
+.light-theme {
+  background-color: #fff;
+  color: #333;
+}
+
+.light-theme button {
+  background-color: #0189ac;
+  color: #fff;
+}
+.light-theme button:hover {
+  background-color: #006e8f;
+  color: #fff;
+}
+
+.dark-theme {
+  background-color: #333;
+  color: #fff;
+}
+
+.dark-theme nav {
+  background-color: #444;
+}
+
+.dark-theme nav a {
+  color: #fff;
+}
+
+.dark-theme header {
+  background-color: #222;
+}
+
+.dark-theme button {
+  background-color: #222;
+  color: #fff;
+}
+
+.dark-theme button:hover {
+  background-color: #555;
+}
+
+.dark-theme th {
+  background-color: #444;
+}
+
+.dark-theme td,
+.dark-theme th {
+  border-color: #555;
+}
+
+/* Hidden class */
+.hidden {
+  display: none;
+}
