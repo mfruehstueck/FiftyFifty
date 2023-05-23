@@ -1,93 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fifty/Fifty</title>
-    <link rel="stylesheet" href="main.css" />
+    <link rel="icon" type="image/x-icon" href="/img/favicon.png">
+    <link rel="stylesheet" href="main.css"/>
     <link
-      href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
-      rel="stylesheet"
+            href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
+            rel="stylesheet"
     />
     <script src="main.js" defer></script>
+    <!-- icons -->
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+
+    <script src="index.js" defer></script>
     <script src="getLocation.js" defer></script>
-  </head>
-  <body class="light-theme">
-    <div class="overlay-black"></div>
-    <header>
-      <h1>Fifty/Fifty Game</h1>
-    </header>
-    <nav>
-      <ul>
-        <li><a href="#" id="nav-home">Home</a></li>
+</head>
+<body class="light-theme">
+<header>
+    <div class="logocontainer">
+        <img class="logo" src="img/5050.png" alt="Logo">
+    </div>
+    <h1>The Fifty/Fifty Game</h1>
+</header>
+<nav>
+    <ul>
+        <div>
+            <li><a href="#" id="nav-home">Home</a></li>
+        </div>
         <li><a href="#" id="nav-leaderboard">Leaderboard</a></li>
         <li><a href="#" id="nav-login">Login</a></li>
-        <li><a href="#" id="nav-theme">Appearance</a></li>
-      </ul>
-    </nav>
-    <main>
-      <!-- Home view -->
-      <section id="home-view">
+        <div id="icon-btn">
+            <li>
+                <a href="#" id="nav-theme" class="light-theme-icon"
+                ><span class="material-icons">wb_sunny</span></a
+                >
+            </li>
+        </div>
+    </ul>
+</nav>
+<main>
+    <!-- Home view -->
+    <section id="home-view">
         <div class="home-container">
-          <h2>Welcome to Fifty/Fifty!</h2>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-            Exercitationem enim et facere rerum officiis atque impedit qui nam.
-            Fuga a ad sed velit! Cupiditate odit architecto, necessitatibus
-            nesciunt blanditiis ducimus!
-          </p>
-          <button id="quick-game">Start Quick Game</button>
-          <button id="home-login">Login</button>
-          <h3>Top 3 Players</h3>
-          <ol id="top-players">
-            <!-- Top player list  -->
-          </ol>
-        </div>
-      </section>
-      <!-- Game view -->
-      <section id="game-view">
-        <h2 id ="question">Question: Which place is this?</h2>
-        <div class="image-container">
-          <div class="image-option">
-            <div id="mly1" style="width: 45vw; height: 55vh;"></div>
-            <button data-option="1" id="b1">Option 1</button>
-          </div>
-          <div class="image-option">
-            <div id="mly2" style="width: 45vw; height: 55vh;"></div>
-            <button data-option="2" id="b2">Option 2</button>
-          </div>
-        </div>
-      </section>
+            <h2>Welcome to Fifty/Fifty!</h2>
+            <p class="description">
+                This game is going to challenge your geography knowledge. You get two pictures from all over the world,
+                then
+                you have to answer a given question.
+                For each right answer you get points.
+                Create an account for free and compete against others!
+            </p>
+            <div id="geo-location"></div>
+            <button id="quick-game">Start Quick Game</button>
+            <button id="home-login">Login</button>
+            <h3>Top 3 Players</h3>
+            <ol id="top-players">
 
-      <!-- Leaderboard view -->
-      <section id="leaderboard-view" class="hidden">
+                <!-- Top player list  -->
+            </ol>
+        </div>
+        <footer>
+            <div id="footer">
+                <p>A project by students of <a href="https://www.fh-campuswien.ac.at/">FH Campus Wien</a></p>
+                <p><a href="mailto:lisa.falter@stud.fh-campuswien.ac.at">Mail us for questions and feedback!</a></p>
+            </div>
+        </footer>
+    </section>
+
+    <!-- Game view -->
+    <section id="game-view">
+        <div id="score"></div>
+        <h2 id="question">Question: Which place is this?</h2>
+        <div class="containers">
+            <div class="image-container1">
+                <div class="image-option1">
+                    <div id="mly1" style="width: 45vw; height: 55vh;"></div>
+                    <button data-option="1" id="b1">Option 1</button>
+                </div>
+            </div>
+            <div class="image-container2">
+                <div class="image-option2">
+                    <div id="mly2" style="width: 45vw; height: 55vh;"></div>
+                    <button data-option="2" id="b2">Option 2</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard view -->
+    <section id="leaderboard-view" class="hidden">
         <h2>Leaderboard</h2>
         <table>
-          <thead>
+            <thead>
             <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>Score</th>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Score</th>
             </tr>
-          </thead>
-          <tbody id="leaderboard-table">
+            </thead>
+            <tbody id="leaderboard-table">
             <!-- Table content  -->
-          </tbody>
+            </tbody>
         </table>
-      </section>
+    </section>
 
-      <!-- Login view -->
-      <section id="login-view" class="hidden">
+    <!-- Login view -->
+    <section id="login-view" class="hidden">
         <h2>Login</h2>
         <form id="login-form">
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required />
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-          <button type="submit">Login</button>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required/>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required/>
+            <button type="submit">Login</button>
         </form>
-      </section>
-    </main>
-  </body>
+    </section>
+</main>
+</body>
 </html>
