@@ -15,7 +15,7 @@ module.exports = [
         id1: "173684327997946",
         id2: "344148887106394",
         correct: 2,
-        question: "Which image shows your favoutite university(FH-Campus)?"
+        question: "Which image shows your favourite university?"
     },
     {
         id1: "879446539579711",
