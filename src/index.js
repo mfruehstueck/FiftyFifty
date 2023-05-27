@@ -8,7 +8,8 @@ let round = 1;
 let score = 0;
 let correctAnswer = 0;
 let viewer1;
-let viewer2
+let viewer2;
+let countdownInterval;
 
 function getViews(round) {
     const xhr = new XMLHttpRequest();
@@ -33,9 +34,10 @@ function getViews(round) {
             const questionElement = document.getElementById('question');
             questionElement.innerText = r['question']
             correctAnswer = r['correct'];
-            
+            startCountdown(); 
             console.log("Round: " + round);
             console.log("Points: " + score);
+
         } else {
             console.log("not epic");
         }
@@ -47,28 +49,45 @@ function getViews(round) {
     xhr.send();
 }
 
-function endRound(answer) {
-    /*
-    Temporary solution. Client should send answer to server and get a boolean as response
-    and add points accordingly
-    */
-    if (answer === correctAnswer) {
-        score += 100;
-        updateScore();
-    }
-    console.log(round);
-    console.log(score);
-    if (round >= 5) {
-        roundElement.textContent = "End of Game";
-        console.log("End of Game");
-        console.log("Final Score: " + score + " Points");
-
+function startCountdown() {
+  let timeleft = 30;
+  const countdownElement = document.getElementById('timer-id');
+  countdownElement.innerHTML = timeleft + ' seconds remaining';
+  countdownInterval = setInterval(function () {
+    if (timeleft <= 0) {
+      countdownElement.innerHTML = "Time's up!";
+      endRound(null);
     } else {
-        round++;
-        updateRound();
-        getViews(round);
+      timeleft -= 1;
+      countdownElement.innerHTML = timeleft + ' seconds remaining';
     }
+  }, 1000);
 }
+
+function endRound(answer) {
+  clearInterval(countdownInterval); // clear countdown interval
+
+  if (answer === correctAnswer) {
+    score += 100;
+    updateScore();
+  }
+  console.log('Round: ' + round);
+  console.log('Score: ' + score);
+
+  if (round >= 5) {
+    const roundElement = document.getElementById('round-id');
+    roundElement.textContent = "End of Game";
+    clearInterval(countdownInterval);
+    timerElement.textContent = "Time is up!";
+    console.log('End of Game');
+    console.log('Final Score: ' + score + ' Points');
+  } else {
+    round++;
+    updateRound();
+    getViews(round);
+  }
+}
+
 
 function disposeViewers() {
     if (viewer1 && viewer2) {
@@ -78,8 +97,6 @@ function disposeViewers() {
 }
 
 /*
-
-
 
 const toggleTheme = () => {
   document.body.classList.toggle("dark-theme");
@@ -129,12 +146,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Hide all sections
     document.querySelectorAll("main > section").forEach((section) => {
       section.classList.add("hidden");
+     
     });
   
     // Show the selected section
     document.getElementById(sectionId).classList.remove("hidden");
   };
-  
+
   document.getElementById("nav-home").addEventListener("click", () => {
     showSection("home-view");
   });
@@ -150,6 +168,24 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("quick-game").addEventListener("click", () => {
     getViews(1);
     showSection("game-view");
+  });
+
+  let timerElement;
+  document.getElementById("timer-game").addEventListener("click", () => {
+    round = 1;
+    updateRound();
+    score = 0;
+    updateScore();
+    clearInterval(countdownInterval);
+    getViews(1); 
+    showSection("game-view");
+    if(!timerElement) {
+    timerElement = document.createElement("p");
+    timerElement.setAttribute("id", "timer-id");
+    let containerScore = document.getElementById("score");
+    containerScore.appendChild(timerElement);
+    timerElement.append("Countdown: ");
+    }
   });
   
   document.getElementById("home-login").addEventListener("click", () => {
@@ -184,3 +220,5 @@ document.getElementById("b2").addEventListener("click", () => {
   containerScore.appendChild(scoreElement);
   updateScore();
   updateRound();
+
+
