@@ -143,7 +143,7 @@ main {
     justify-content: right;
 }
 
-#score-id, #round-id {
+#score-id, #round-id, #timer-id {
     color: #004aad;
     font-size: 1.8rem;
     font-weight: 500;
@@ -310,7 +310,7 @@ th {
     background-color: #444;
 }
 
-.dark-theme #score-id, .dark-theme #round-id {
+.dark-theme #score-id, .dark-theme #round-id, .dark-theme #timer-id {
     background-color: #222;
     color: aliceblue;
 }
