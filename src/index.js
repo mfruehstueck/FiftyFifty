@@ -10,6 +10,7 @@ let correctAnswer = 0;
 let viewer1;
 let viewer2;
 let countdownInterval;
+let timerMode = false;
 
 function getViews(round) {
     const xhr = new XMLHttpRequest();
@@ -34,7 +35,8 @@ function getViews(round) {
             const questionElement = document.getElementById('question');
             questionElement.innerText = r['question']
             correctAnswer = r['correct'];
-            startCountdown(); 
+            if(timerMode === true){
+            startCountdown();}
             console.log("Round: " + round);
             console.log("Points: " + score);
 
@@ -70,6 +72,7 @@ function endRound(answer) {
   if (answer === correctAnswer) {
     score += 100;
     updateScore();
+    
   }
   console.log('Round: ' + round);
   console.log('Score: ' + score);
@@ -166,8 +169,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   
   document.getElementById("quick-game").addEventListener("click", () => {
+    timerMode = false;
+    round = 1;
+    updateRound();
+    score = 0;
+    updateScore();
     getViews(1);
     showSection("game-view");
+    if(timerElement) {
+      timerElement.parentNode.removeChild(timerElement);
+      timerElement = null;
+    }
   });
 
   let timerElement;
@@ -176,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRound();
     score = 0;
     updateScore();
+    timerMode = true;
     clearInterval(countdownInterval);
     getViews(1); 
     showSection("game-view");
