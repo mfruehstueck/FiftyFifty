@@ -16,7 +16,7 @@ body {
 }
 
 button {
-    background-color: #004aad;
+    background-color: #344d90;
     color: #fff;
     border: none;
     border-radius: 1rem;
@@ -26,7 +26,7 @@ button {
 }
 
 button:hover {
-    background-color: #004aad;
+    background-color: #344d90;
     color: #fff;
 }
 
@@ -34,7 +34,7 @@ button:hover {
 header {
     display: flex;
     flex-direction: row;
-    background-color: #004aad;
+    background-color: #344d90;
     padding: 0.5rem;
     gap: 1rem;
 }
@@ -86,10 +86,11 @@ nav a:hover {
 
 /* Main container */
 main {
-    margin: 0.5rem auto;
+    margin: 0rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1200vw;*/
 }
+
 
 .description {
     font-size: 1.5rem;
@@ -108,7 +109,7 @@ main {
 }
 
 #home-view button:hover {
-    background-color: #004aad;
+    background-color: #344d90;
 }
 
 #top-players {
@@ -125,6 +126,19 @@ main {
     justify-content: space-around;
     gap: 2rem;
     align-items: center;
+    background-color: #ffb745;
+    padding: 0.5rem;
+}
+
+.kompasscontainer {
+    width: 80px;
+    height: 80px;
+}
+
+.kompass {
+    width: inherit;
+    height: inherit;
+    object-fit: fill;
 }
 
 #footer {
@@ -133,7 +147,7 @@ main {
     gap: 2rem;
     align-items: center;
     padding: 0.8rem;
-    background-color: #adc5e5;
+    background-color: #5cc5ef;
 }
 
 /* Game view */
@@ -144,19 +158,21 @@ main {
 }
 
 #score-id, #round-id, #timer-id {
-    color: #004aad;
+    color: #344d90;
     font-size: 1.8rem;
     font-weight: 500;
     padding: 0.3rem 1rem;
-    background-color: #e66e24;
+    background-color: #e7552c;
     border-radius: 0;
+    margin-right: 0.5rem;
 }
 
 .containers {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    max-width: fit-content;
 }
 
 .image-container1 {
@@ -164,7 +180,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f5c09f;
+    background-color: #ffb745;
     padding: 2rem;
     /*gap: 4rem;*/
     /*text-align: center;*/
@@ -175,7 +191,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #adc5e5;
+    background-color: #5cc5ef;
     padding: 2rem;
     /*text-align: center;*/
 }
@@ -188,20 +204,20 @@ main {
     /*border-radius: 1rem; */
 }
 
-.image-option1 button, .image-option2 button {
-    border-radius: 0;
+#b1, #b2 {
+    border-radius: 1rem;
     max-width: 100%;
     justify-content: center;
     align-self: center;
     align-items: center;
-    padding: 1.5rem 10rem;
-    margin: 0 1rem 1rem 1rem;
+    padding: 1rem 10rem;
+    margin: 1rem 1rem 1rem 1rem;
     cursor: pointer;
 }
 
 
 .image-option button:hover {
-    background-color: #004aad;
+    background-color: #344d90;
 }
 
 h2 {
@@ -248,7 +264,7 @@ th {
 }
 
 #login-form button:hover {
-    background-color: #004aad;
+    background-color: #344d90;
 }
 
 /* Light/Dark theme */
@@ -258,12 +274,12 @@ th {
 }
 
 .light-theme button {
-    background-color: #004aad;
+    background-color: #344d90;
     color: #fff;
 }
 
 .light-theme button:hover {
-    background-color: #004aad;
+    background-color: #344d90;
     color: #fff;
 }
 
@@ -310,6 +326,10 @@ th {
     background-color: #444;
 }
 
+.dark-theme .home-container {
+    background-color: #555;
+}
+
 .dark-theme #score-id, .dark-theme #round-id, .dark-theme #timer-id {
     background-color: #222;
     color: aliceblue;
@@ -327,5 +347,5 @@ th {
 }
 
 #buttonOption1 {
-    background-color: #e66e24
+    background-color: #e7552c;
 }

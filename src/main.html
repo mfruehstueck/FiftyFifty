@@ -42,7 +42,7 @@
     <!-- Home view -->
     <section id="home-view">
         <div class="home-container">
-            <h2>Welcome to Fifty/Fifty!</h2>
+            <h2 id="welcomeh2">Welcome to Fifty/Fifty!</h2>
             <p class="description">
                 This game is going to challenge your geography knowledge. You get two pictures from all over the world,
                 then
@@ -50,9 +50,12 @@
                 For each right answer you get points.
                 Create an account for free and compete against others!
             </p>
+            <div class="kompasscontainer">
+                <img class="kompass" src="img/kompass.png" alt="K">
+            </div>
             <div id="geo-location"></div>
-            <button id="quick-game">Start Quick Game</button>
-            <button id="timer-game">Start Game with Timer</button>
+            <button id="quick-game">Level 1: Start Quick Game</button>
+            <button id="timer-game">Level 2: Start Game with Timer</button>
             <button id="home-login">Login</button>
             <h3>Top 3 Players</h3>
             <ol id="top-players">
@@ -71,7 +74,7 @@
     <!-- Game view -->
     <section id="game-view">
         <div id="score"></div>
-        <h2 id="question">Question: Which place is this?</h2>
+        <h2 id="question"></h2>
         <div class="containers">
             <div class="image-container1">
                     <div id="mly1" style="width: 45vw; height: 55vh;"></div>
@@ -86,7 +89,7 @@
 
     <!--Game with timer-->
     <section id="timer-game-view">
-        <div id="timer-container">TESTTEXT</div>
+        <div id="timer-container"></div>
     </section>
     
     <!-- Leaderboard view -->

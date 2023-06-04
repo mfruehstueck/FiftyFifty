@@ -19,7 +19,7 @@ if ("geolocation" in navigator) {
                 if (data.results.length > 0) {
                     const city = data.results[0].components.city;
                     const country = data.results[0].components.country;
-                    coordinates.append(" (City: " + city + " , Country: " + country + ")")
+                    coordinates.append(" (City: " + city + ", Country: " + country + ")")
                 } else {
                     coordinates.append("No city or country could be found for your coordinates.");
                 }
