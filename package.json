@@ -7,7 +7,7 @@
     "start": "node ./backend/server.js",
     "start-nodemon": "nodemon ./backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack --config webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +18,11 @@
     "mapillary-js": "^4.1.1"
   },
   "devDependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "express-session": "^1.17.3",
     "nodemon": "2.0.22",
+    "qs": "^6.11.2",
     "webpack-cli": "^5.1.1"
   }
 }
