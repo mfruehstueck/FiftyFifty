@@ -88,7 +88,7 @@ nav a:hover {
 main {
     margin: 0rem;
     width: 100%;
-    max-width: 1200vw;*/
+    max-width: 1200vw;
 }
 
 
@@ -336,7 +336,7 @@ th {
 }
 
 
-.dark-theme #footer {
+.dark-theme #footer, #correct {
     background-color: #555;
     color: #ddd;
 }
@@ -348,4 +348,44 @@ th {
 
 #buttonOption1 {
     background-color: #e7552c;
+}
+
+#correct {
+    color: #344d90;
+    font-size: 3.5rem;
+    background-color: #e7552c;
+    padding: 4rem;
+    border-radius: 10%;
+    border-color: #344d90;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+#continueButton, #nextLevelButton {
+    color:#e7552c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+#overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+        z-index: 9998;
+        display: block;
 }

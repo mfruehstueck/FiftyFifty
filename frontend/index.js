@@ -68,21 +68,3 @@ document.getElementById("home-login").addEventListener("click", () => {
 showSection("home-view");
 
 
-//Score hardcoded
-let score = 0;
-document.getElementById("buttonOption2").addEventListener("click", () => {
-  score++;
-  updateScore();
-});
-
-function updateScore() {
-  scoreElement.textContent = "Score: "+score;
-}
-
-let scoreElement = document.createElement("p");
-scoreElement.setAttribute("id", "score-id")
-let containerScore = document.getElementById("score");
-containerScore.appendChild(scoreElement);
-updateScore();
-
-
