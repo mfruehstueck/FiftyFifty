@@ -18,72 +18,98 @@ app.get("/StreetViewsPls", function (req, res) {
     res.send(round[req.query.round - 1]);
 })
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '..', 'src', 'main.html'));
-});
-
-
 // session management
+let session;
+// let sessionList;
+let user = {
+    username: "",
+    password: "",
+    highscore: 0,
+    style: "dark"
+};
+let leaderboardList;
+let userList = [user];
+
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
-const session = require("express-session");
+const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
 
+function parseMathExpression(input) {
+    return Function(`'use strict'; return (${input})`)();
+}
+
 app.use(cookieParser());
-app.use(session({
-        secret: process.env.SESSION_SECRET || "blablub",
-        resave: false,
-        saveUninitialized: false,
+app.use(sessions({
+        secret: process.env.SESSION_SECRET,
+        saveUninitialized: true,
+        cookie: { maxAge: parseMathExpression(process.env.SESSION_MAXAGE) },
+        resave: false
     })
 );
 
-let user = {};
-const users = [user];
+app.get('/', function (req, res) {
+    session = req.session;
+    console.log(session);
+    // if(session.userid){
+    res.sendFile(path.join(__dirname, '..', 'src', 'main.html'));
+    // } else console.log("Fuck");
+});
 
-app.post("/login", (req, res) => {
-    user.name = req.query.name;
+app.post("/user", (req, res) => {
+    user.username = req.query.username;
     user.password = req.query.password;
-    user.highscore = 0;
 
+    console.log("User:");
+    console.log(user);
     let userExists = false;
-    for (const u of users) {
-        if (u.name === user.name) {
+    for (const u of userList) {
+        if (u.username === user.username) {
             userExists = true;
             if (u.password === user.password) {
                 user = u;
-            } else return res.status(200).json({info: `[${user.name}]: invalid password`})
+            } else return res.status(200).json({ info: `[${user.username}]: invalid password` })
         }
     }
-    if (!userExists) users.push(user);
+    if (!userExists) userList.push(user);
+    else {
+        req.session = user.username;
+    }
     console.log("Users:");
-    console.log(users);
+    console.log(userList);
 
-    req.session.user = user;
-    req.session.save();
-    return res.status(201).json({info: `[${user.name}] logged in`});
+    session = req.session;
+    session.userid = user.username;
+    // req.session.save();
+    return res.status(201).json({ info: `[${user.username}] logged in` });
 });
 
 app.get("/users", (req, res) => {
-    return res.status(200).json(users);
+    return res.status(200).json(userList);
 });
 
-app.get("/user", (req, res) => {
+app.post("/user", (req, res) => {
     if (req.session.user != null) {
         return res.status(200)
-            .json({info: `[${user.name}] profile info`, data: req.session.user});
-    } else return res.status(200).json({info: "No data present in session"});
+            .json({ info: `[${user.name}] profile info`, data: req.session.user });
+    } else return res.status(200).json({ info: "No data present in session" });
 });
 
 app.post("/logout", (req, res) => {
     req.session.destroy();
-    return res.status(204).json({info: `[${user.name}] logged out`});
+    return res.status(204).json({ info: `[${user.name}] logged out` });
 });
 
 app.delete("/deregister", (req, res) => {
-
+    console.log("deregister");
 });
 
-app.listen(3000)
-console.log("Server now listening on http://localhost:3000/")
+// leaderboard
+app.get("/leaderboard", (req, res) => {
+    console.log("leaderboard:");
+});
+
+app.listen(3000);
+console.log("Server now listening on http://localhost:3000/");
