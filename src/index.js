@@ -19,6 +19,7 @@ function getViews(round) {
     xhr.onload = function () {
         if (xhr.status === 200) {
             const r = JSON.parse(xhr.responseText);
+            console.log(r);
             disposeViewers();
             viewer1 = new Viewer({
                 accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
@@ -82,7 +83,7 @@ function startCountdown() {
 function endRound(answer) {
   clearInterval(countdownInterval); // clear countdown interval
 
-  if (answer === correctAnswer) {
+  if (answer === correctAnswer || correctAnswer === 0) {
     score += 100;
     updateScore();
     showCorrectAnswer(answer);
