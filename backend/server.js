@@ -8,6 +8,7 @@ const app = express();
 // Parse urlencoded bodies
 app.use(bodyParser.json());
 
+
 // Serve static content in directory 'files'
 app.use(express.static(path.join(__dirname, '..', 'src')));
 app.use(express.static(path.join(__dirname, '..', 'dist')));
@@ -18,16 +19,22 @@ app.get("/StreetViewsPls", function (req, res) {
     res.send(round[req.query.round - 1]);
 })
 
+// no idea why this is needed but it does not work without it
+app.get("/WTF", (req, res) => {
+    res.sendStatus(200);
+});
+
 // session management
-let session;
-// let sessionList;
+let session = {};
+let sessionList = [session];
 let user = {
     username: "",
     password: "",
+    countryCode: "",
     highscore: 0,
-    style: "dark"
+    style: "dark",
+    lastTenPlayedGames: []
 };
-let leaderboardList;
 let userList = [user];
 
 if (process.env.NODE_ENV !== "production") {
@@ -37,8 +44,16 @@ if (process.env.NODE_ENV !== "production") {
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname));
+
 function parseMathExpression(input) {
     return Function(`'use strict'; return (${input})`)();
+}
+
+function getUser(username) {
+
 }
 
 app.use(cookieParser());
@@ -58,12 +73,21 @@ app.get('/', function (req, res) {
     // } else console.log("Fuck");
 });
 
-app.post("/user", (req, res) => {
-    user.username = req.query.username;
-    user.password = req.query.password;
+app.get("/countryCodes", (req, res) => {
+    res.send([
+        "nop",
+        "Austria",
+        "Australia"
+    ]);
+});
 
-    console.log("User:");
-    console.log(user);
+app.post("/user", (req, res) => {
+    user.username = req.body.username;
+    user.password = req.body.password;
+    user.countryCode = req.body.countryCode;
+
+    // console.log("User:");
+    // console.log(user);
     let userExists = false;
     for (const u of userList) {
         if (u.username === user.username) {
@@ -75,15 +99,17 @@ app.post("/user", (req, res) => {
     }
     if (!userExists) userList.push(user);
     else {
-        req.session = user.username;
+        // req.session.username = user.username;
     }
     console.log("Users:");
     console.log(userList);
 
     session = req.session;
-    session.userid = user.username;
-    // req.session.save();
-    return res.status(201).json({ info: `[${user.username}] logged in` });
+    session.username = user.username;
+    session.countryCode = user.countryCode;
+    session.style = user.style;
+
+    res.redirect("/");
 });
 
 app.get("/users", (req, res) => {
@@ -107,6 +133,8 @@ app.delete("/deregister", (req, res) => {
 });
 
 // leaderboard
+let leaderboardList;
+
 app.get("/leaderboard", (req, res) => {
     console.log("leaderboard:");
 });

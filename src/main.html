@@ -5,18 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fifty/Fifty</title>
-    <link rel="icon" type="image/x-icon" href="/img/favicon.png">
+
+    <link rel="icon" type="image/x-icon" href="./img/favicon.png">
     <link rel="stylesheet" href="main.css"/>
-    <link
-            href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
-            rel="stylesheet"
-    />
-    <script src="main.js" defer></script>
+    <link href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
+          rel="stylesheet"/>
     <!-- icons -->
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"/>
+    <script src="main.js" defer></script>
     <script src="getLocation.js" defer></script>
 </head>
 <body class="light-theme">
@@ -77,12 +74,12 @@
         <h2 id="question"></h2>
         <div class="containers">
             <div class="image-container1">
-                    <div id="mly1" style="width: 45vw; height: 55vh;"></div>
-                    <button data-option="1" id="b1">Option 1</button>
+                <div id="mly1" style="width: 45vw; height: 55vh;"></div>
+                <button data-option="1" id="b1">Option 1</button>
             </div>
             <div class="image-container2">
-                    <div id="mly2" style="width: 45vw; height: 55vh;"></div>
-                    <button data-option="2" id="b2">Option 2</button>
+                <div id="mly2" style="width: 45vw; height: 55vh;"></div>
+                <button data-option="2" id="b2">Option 2</button>
             </div>
         </div>
     </section>
@@ -91,7 +88,7 @@
     <section id="timer-game-view">
         <div id="timer-container"></div>
     </section>
-    
+
     <!-- Leaderboard view -->
     <section id="leaderboard-view" class="hidden">
         <h2>Leaderboard</h2>
@@ -112,12 +109,14 @@
     <!-- Login view -->
     <section id="login-view" class="hidden">
         <h2>Login</h2>
-        <!-- method="post" enctype="multipart/form-data"-->
+        <!-- action="/user" method="post" method="post" enctype="multipart/form-data"-->
         <form id="login-form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required/>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required/>
+            <label for="countryCode">Country Code:</label>
+            <select id="countryCode" name="countryCode"></select>
             <button type="submit">Login</button>
         </form>
     </section>

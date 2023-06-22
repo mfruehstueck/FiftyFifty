@@ -1,54 +1,114 @@
 /*
   Mapillary Stuff
 */
-import {Viewer} from 'mapillary-js';
+import {Viewer} from "mapillary-js";
 
-let round = 1;
+// let currentRound = 1;
 let score = 0;
 let correctAnswer = 0;
-let viewer1;
-let viewer2;
 let countdownInterval;
 let timerMode = false;
+let viewer1;
+let viewer2;
 
-function getViews(round) {
+let currentRound = {
+    roundIdx: 1,
+    imageID1: "946422635936572",
+    imageID2: "2692168084406521"
+}
+
+
+function getViews(round, containerID1 = "mly1", containerID2 = "mly2") {
+    let imageID1 = "946422635936572";
+    let imageID2 = "2692168084406521";
+
     const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const r = JSON.parse(xhr.responseText);
-            disposeViewers();
-            viewer1 = new Viewer({
-                accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
-                container: 'mly1',
-                imageId: r['id1'],
-            });
-            viewer1.deactivateCover();
-            console.log(r);
-            viewer2 = new Viewer({
-                accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
-                container: 'mly2',
-                imageId: r['id2'],
-            });
-            viewer2.deactivateCover();
+    xhr.onload = () => {
+        console.log(imageID1);
+        console.log(containerID1);
+        disposeViewers();
+        viewer1 = new Viewer({
+            accessToken: "MLY|6425749720781602|74d4571106775c1ff773082d77b80f27",
+            container: containerID1,
+            imageId: imageID1,
+        });
+        viewer1.deactivateCover();
+        viewer2 = new Viewer({
+            accessToken: "MLY|6425749720781602|74d4571106775c1ff773082d77b80f27",
+            container: containerID2,
+            imageId: imageID2,
+        });
+        viewer2.deactivateCover();
+    }
 
-            const questionElement = document.getElementById('question');
-            questionElement.innerText = r['question']
-            correctAnswer = r['correct'];
-            if (timerMode === true) {
-                startCountdown();
-            }
-            console.log("Round: " + round);
-            console.log("Points: " + score);
-
-        } else {
-            console.log("not epic");
-        }
-    };
-
-    const url = new URL("/StreetViewsPls", location.href);
-    url.searchParams.set("round", round);
-    xhr.open("GET", url);
+    xhr.open("GET", "/WTF");
     xhr.send();
+}
+
+// function getViews(round) {
+//     let containerID1 = "mly1";
+//     let containerID2 = "mly2";
+//     let imageID1 = 946422635936572;
+//     let imageID2 = 2692168084406521;
+//     const xhr = new XMLHttpRequest();
+//     xhr.onload = function () {
+//         if (xhr.status === 200) {
+//             const r = JSON.parse(xhr.responseText);
+//             disposeViewers();
+//             viewer1 = new Viewer({
+//                 accessToken: "MLY|6425749720781602|74d4571106775c1ff773082d77b80f27",
+//                 container: containerID1,
+//                 imageId: imageID1,
+//             });
+//             viewer1.deactivateCover();
+//             viewer2 = new Viewer({
+//                 accessToken: "MLY|6425749720781602|74d4571106775c1ff773082d77b80f27",
+//                 container: containerID2,
+//                 imageId: imageID2,
+//             });
+//             viewer2.deactivateCover();
+//
+//             // disposeViewers();
+//             // viewer1 = new Viewer({
+//             //     accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
+//             //     container: 'mly1',
+//             //     imageId: r['id1'],
+//             // });
+//             // viewer1.deactivateCover();
+//             // console.log(r);
+//             // viewer2 = new Viewer({
+//             //     accessToken: 'MLY|6425749720781602|74d4571106775c1ff773082d77b80f27',
+//             //     container: 'mly2',
+//             //     imageId: r['id2'],
+//             // });
+//             // viewer2.deactivateCover();
+//
+//             // const questionElement = document.getElementById('question');
+//             // questionElement.innerText = r['question']
+//             // correctAnswer = r['correct'];
+//             // if (timerMode === true) {
+//             //     startCountdown();
+//             // }
+//             console.log("Round: " + round);
+//             console.log("Points: " + score);
+//
+//         } else {
+//             console.log("not epic");
+//         }
+//     };
+//
+//     const url = new URL("/StreetViewsPls", location.href);
+//     console.log(url);
+//     url.searchParams.set("round", round);
+//     xhr.open("GET", url);
+//     xhr.send();
+// }
+
+function disposeViewers() {
+    if (viewer1 && viewer2) {
+        viewer1.remove();
+        viewer2.remove();
+    }
 }
 
 function startCountdown() {
@@ -74,10 +134,10 @@ function endRound(answer) {
         updateScore();
 
     }
-    console.log('Round: ' + round);
+    console.log('Round: ' + currentRound.roundIdx);
     console.log('Score: ' + score);
 
-    if (round >= 5) {
+    if (currentRound.roundIdx >= 5) {
         const roundElement = document.getElementById('round-id');
         roundElement.textContent = "End of Game";
         clearInterval(countdownInterval);
@@ -85,19 +145,12 @@ function endRound(answer) {
         console.log('End of Game');
         console.log('Final Score: ' + score + ' Points');
     } else {
-        round++;
+        currentRound.roundIdx++;
         updateRound();
-        getViews(round);
+        getViews(currentRound);
     }
 }
 
-
-function disposeViewers() {
-    if (viewer1 && viewer2) {
-        viewer1.remove();
-        viewer2.remove();
-    }
-}
 
 /*
 
@@ -164,18 +217,53 @@ document.getElementById("nav-leaderboard").addEventListener("click", () => {
     showSection("leaderboard-view");
 });
 
+
+document.getElementById("login-form").addEventListener("submit", () => {
+    alert("asdf");
+    fetch("/user")
+        .then(() => showSection("leaderboard-view"))
+        .catch(error => console.log(error));
+});
 document.getElementById("nav-login").addEventListener("click", () => {
     showSection("login-view");
+
+    const sel_countryCode = document.getElementById("countryCode");
+    let sel_countryCode_option;
+    let sel_countryCode_option_text;
+
+
+
+    fetch("/countryCodes")
+        .then(response => response.json())
+        .then(data => {
+            for (const countryCodeValue of data) {
+                console.log(countryCodeValue);
+                sel_countryCode_option = document.createElement("option");
+                sel_countryCode_option.setAttribute("value", countryCodeValue);
+
+                sel_countryCode_option_text = document.createTextNode(countryCodeValue);
+                sel_countryCode_option.append(sel_countryCode_option_text);
+
+                sel_countryCode.appendChild(sel_countryCode_option);
+            }
+        })
+        .catch(error => console.log(error));
+
+
 });
 
-document.getElementById("quick-game").addEventListener("click", () => {
-    timerMode = false;
-    round = 1;
-    updateRound();
+function initGame() {
+    currentRound.roundIdx = 1;
     score = 0;
+    updateRound();
     updateScore();
-    getViews(1);
+    getViews(currentRound);
     showSection("game-view");
+}
+
+document.getElementById("quick-game").addEventListener("click", () => {
+    initGame();
+    timerMode = false;
     if (timerElement) {
         timerElement.parentNode.removeChild(timerElement);
         timerElement = null;
@@ -184,14 +272,8 @@ document.getElementById("quick-game").addEventListener("click", () => {
 
 let timerElement;
 document.getElementById("timer-game").addEventListener("click", () => {
-    round = 1;
-    updateRound();
-    score = 0;
-    updateScore();
+    initGame()
     timerMode = true;
-    clearInterval(countdownInterval);
-    getViews(1);
-    showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");
@@ -222,7 +304,7 @@ function updateScore() {
 }
 
 function updateRound() {
-    roundElement.textContent = "Round: " + round;
+    roundElement.textContent = "Round: " + currentRound.roundIdx;
 }
 
 let roundElement = document.createElement("p");
@@ -235,5 +317,3 @@ scoreElement.setAttribute("id", "score-id")
 containerScore.appendChild(scoreElement);
 updateScore();
 updateRound();
-
-
