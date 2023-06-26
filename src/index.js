@@ -16,7 +16,8 @@ let currentRound = {
     question: "",
     imageID1: "",
     imageID2: "",
-    currentScore: 0
+    currentScore: 0,
+    quessWasCorrect: false
 }
 
 function getViews(round, containerID1 = "mly1", containerID2 = "mly2") {
@@ -81,6 +82,7 @@ function endRound(answer) {
         currentRound.imageID1 = tmpRound.imageID1;
         currentRound.imageID2 = tmpRound.imageID2;
         currentRound.currentScore = tmpRound.currentScore;
+        currentRound.quessWasCorrect = tmpRound.quessWasCorrect;
 
         console.log("currentRound answer: " + answer);
         console.log(currentRound);
@@ -88,6 +90,12 @@ function endRound(answer) {
         updateRound();
         updateScore();
         showCorrectAnswer(answer);
+
+        const questionElement = document.getElementById('question');
+        questionElement.innerText = currentRound.question;
+        if (timerMode === true || timerModefast === true) {
+            startCountdown();
+        }
 
         if (tmpRound.gameWon !== true) getViews(currentRound);
         else {
@@ -129,8 +137,9 @@ function showCorrectAnswer(answer) {
     containerScore.appendChild(correct);
     const continueButton = document.createElement("button");
     continueButton.setAttribute("id", "continueButton");
-    if (round < 5) {
-        if (answer === correctAnswer) {
+
+    if (currentRound.roundIdx < 5) {
+        if (answer === currentRound.quessWasCorrect) {
             correct.append("WELL DONE!");
         } else {
             correct.append("NOPE.");
@@ -161,15 +170,16 @@ function showCorrectAnswer(answer) {
 }
 
 function showTimerModeFast() {
-    round = 1;
-    updateRound();
-    score = 0;
-    updateScore();
+    // round = 1;
+    // updateRound();
+    // score = 0;
+    // updateScore();
+    initGame();
     timerMode = false;
     timerModefast = true;
-    clearInterval(countdownInterval);
-    getViews(1);
-    showSection("game-view");
+    // clearInterval(countdownInterval);
+    // getViews(1);
+    // showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");
@@ -180,15 +190,16 @@ function showTimerModeFast() {
 }
 
 function showTimerMode() {
-    round = 1;
-    updateRound();
-    score = 0;
-    updateScore();
+    // round = 1;
+    // updateRound();
+    // score = 0;
+    // updateScore();
+    initGame();
     timerModefast = false;
     timerMode = true;
-    clearInterval(countdownInterval);
-    getViews(1);
-    showSection("game-view");
+    // clearInterval(countdownInterval);
+    // getViews(1);
+    // showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");
@@ -284,11 +295,18 @@ function initGame() {
         currentRound.imageID1 = tmpRound.imageID1;
         currentRound.imageID2 = tmpRound.imageID2;
         currentRound.currentScore = tmpRound.currentScore;
+        currentRound.quessWasCorrect = tmpRound.quessWasCorrect;
 
         console.log(currentRound);
 
         updateRound();
         updateScore();
+
+        const questionElement = document.getElementById('question');
+        questionElement.innerText = currentRound.question;
+        if (timerMode === true || timerModefast === true) {
+            startCountdown();
+        }
 
         getViews(currentRound);
 
@@ -300,13 +318,14 @@ function initGame() {
 }
 
 document.getElementById("quick-game").addEventListener("click", () => {
+    initGame();
     timerMode = false;
-    round = 1;
-    updateRound();
-    score = 0;
-    updateScore();
-    getViews(1);
-    showSection("game-view");
+    // round = 1;
+    // updateRound();
+    // score = 0;
+    // updateScore();
+    // getViews(1);
+    // showSection("game-view");
     if (timerElement) {
         timerElement.parentNode.removeChild(timerElement);
         timerElement = null;
@@ -314,14 +333,15 @@ document.getElementById("quick-game").addEventListener("click", () => {
 });
 
 document.getElementById("timer-game").addEventListener("click", () => {
-    round = 1;
-    updateRound();
-    score = 0;
-    updateScore();
+    // round = 1;
+    // updateRound();
+    // score = 0;
+    // updateScore();
+    initGame();
     timerMode = true;
-    clearInterval(countdownInterval);
-    getViews(1);
-    showSection("game-view");
+    // clearInterval(countdownInterval);
+    // getViews(1);
+    // showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");

@@ -4,17 +4,14 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require('express');
 const path = require('path');
-const bodyParser = require('body-parser');
-const rounds = require("./rounds.js");
+// const bodyParser = require('body-parser');
+// const rounds = require("./rounds.js");
 const randomIds = require("./randomIds.js");
 const northernIds = require("./northernIds.js");
 const southernIds = require("./southernIds.js");
 // for csv parsing
 const fs = require("fs");
 const { parse } = require("csv-parse");
-
-// Mapillary token
-const mapillaryToken = "MLY|6425749720781602|74d4571106775c1ff773082d77b80f27";
 
 const app = express();
 
@@ -317,7 +314,7 @@ async function generateProximityRound(lat, long) {
 
 async function getMapillaryIds(lat1, long1, lat2, long2, fileName) {
 
-  const apiUrl = `https://graph.mapillary.com/images?access_token=${mapillaryToken}&fields=id,computed_geometry&bbox=${long1},${lat1},${long2},${lat2}`;
+  const apiUrl = `https://graph.mapillary.com/images?access_token=${process.env.API_TOKEN}&fields=id,computed_geometry&bbox=${long1},${lat1},${long2},${lat2}`;
   let ids;
   await fetch(apiUrl)
       .then((response) => response.json())
@@ -338,7 +335,7 @@ async function getMapillaryIds(lat1, long1, lat2, long2, fileName) {
   return ids;
 }
 async function getMapillaryCoordinates(id) {
-  const apiUrl = `https://graph.mapillary.com/${id}?access_token=${mapillaryToken}`;
+  const apiUrl = `https://graph.mapillary.com/${id}?access_token=${process.env.API_TOKEN}`;
   await fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
