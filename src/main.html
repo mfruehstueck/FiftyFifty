@@ -109,12 +109,12 @@
     <!-- Login view -->
     <section id="login-view" class="hidden">
         <h2>Login</h2>
-        <!-- action="/user" method="post" method="post" enctype="multipart/form-data"-->
-        <form id="login-form">
+        <!-- action="/user" method="post" -->
+        <form id="login-form" action="">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required/>
+            <input type="text" id="username" name="username" placeholder="Enter your Username..." required/>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required/>
+            <input type="password" id="password" name="password" placeholder="Enter your Password..." required/>
             <label for="countryCode">Country Code:</label>
             <select id="countryCode" name="countryCode"></select>
             <button type="submit">Login</button>
