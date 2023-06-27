@@ -93,7 +93,7 @@
     <!-- Leaderboard view -->
     <section id="leaderboard-view" class="hidden">
         <h2>Leaderboard</h2>
-        <table>
+        <table id="leaderboard_table">
             <thead>
             <tr>
                 <th>Rank</th>
@@ -101,9 +101,7 @@
                 <th>Score</th>
             </tr>
             </thead>
-            <tbody id="leaderboard-table">
-            <!-- Table content  -->
-            </tbody>
+            <tbody id="leaderboard_tBody"></tbody>
         </table>
     </section>
 
@@ -112,13 +110,26 @@
         <h2>Login</h2>
         <!-- action="/user" method="post" -->
         <form id="login-form" action="">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your Username..." required/>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your Password..." required/>
-            <label for="countryCode">Country Code:</label>
-            <select id="countryCode" name="countryCode"></select>
+            <label for="username">Username:</label><input type="text" id="username" placeholder="Enter your username..." required/>
+            <label for="password">Password:</label><input type="password" id="password" placeholder="Enter your password..." required/>
+            <label for="countryCode">Country Code:</label><select id="countryCode" ></select>
             <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <!-- Profile view -->
+    <section id="profile-view" class="hidden">
+        <h2 id="profile_username">Username</h2>
+        <form id="profile_form" action="">
+            <label>Username: <label id="profile_form_username"></label></label>
+            <label>Password: <label id="profile_form_password">********</label></label>
+            <label>Highscore: <label id="profile_form_highscore">0</label></label>
+            <label for="profile_form_countryCode">Country Code: </label><select id="profile_form_countryCode"></select>
+            <label for="profile_form_maxRounds">Max Rounds: </label><input type="number" id="profile_form_maxRounds" placeholder="Enter max rounds" required>
+            <label for="profile_form_roundTime">Round Time: </label><input type="number" id="profile_form_roundTime" placeholder="Enter round time" required>
+            <label for="profile_form_roundTimeFast">Round Time Fast: </label><input type="number" id="profile_form_roundTimeFast" placeholder="Enter fast round time" required>
+            <button type="submit">Save</button>
+            <button id="profile_form_deleteAccount">Delete Account!</button>
         </form>
     </section>
 </main>

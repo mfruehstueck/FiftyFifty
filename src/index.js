@@ -20,6 +20,62 @@ let currentRound = {
     quessWasCorrect: false
 }
 
+let userScheme = {
+    username: "",
+    countryCode: "",
+    highscore: 0,
+    style: "dark",
+    lastTenPlayedGames: [],
+
+    gameSettings: {
+        maxRounds: 4,
+        roundTime: 30,
+        roundTimeFast: 20
+    },
+
+    game: {
+        round: -1,
+        roundTime: 30,
+        score: 0
+    }
+};
+let loggedUser = null;
+
+//::::::::DOM::::::::
+// nav
+const nav_login = document.getElementById("nav-login");
+
+// home
+let nav_home_login = document.getElementById("home-login");
+
+// profile and login
+// profile
+const form_profile = document.getElementById("profile_form");
+const form_profile_username = document.getElementById("profile_username");
+const profile_form_username = document.getElementById("profile_form_username");
+const profile_form_password = document.getElementById("profile_form_password");
+const profile_form_countryCode = document.getElementById("profile_form_countryCode");
+const profile_form_maxRounds = document.getElementById("profile_form_maxRounds");
+const profile_form_roundTime = document.getElementById("profile_form_roundTime");
+const profile_form_roundTimeFast = document.getElementById("profile_form_roundTimeFast");
+const form_profile_deleteAccount = document.getElementById("profile_form_deleteAccount");
+// login
+let form_login = document.getElementById("login-form");
+
+// leaderboard
+let nav_leaderboard_table = document.getElementById("leaderboard_table");
+let nav_leaderboard_tBody = document.getElementById("leaderboard_tBody");
+//::::::::DOM::::::::
+
+
+setOnLoad();
+
+function setOnLoad() {
+    if (loggedUser) {
+        nav_login.value = loggedUser.username;
+    }
+}
+
 function getViews(round, containerID1 = "mly1", containerID2 = "mly2") {
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {
@@ -89,7 +145,6 @@ function endRound(answer) {
 
         updateRound();
         updateScore();
-        showCorrectAnswer(answer);
 
         const questionElement = document.getElementById('question');
         questionElement.innerText = currentRound.question;
@@ -97,8 +152,13 @@ function endRound(answer) {
             startCountdown();
         }
 
-        if (tmpRound.gameWon !== true) getViews(currentRound);
-        else {
+        if (tmpRound.gameWon !== true) {
+            let info = (currentRound.quessWasCorrect) ? "WELL DONE!" : "NOPE";
+            showPopup(info, "NEXT TASK!");
+
+            getViews(currentRound);
+        } else {
+            showPopup("GAME OVER WITH: " + currentRound.currentScore, "-> NEXT LEVEL!");
             const roundElement = document.getElementById('round-id');
             roundElement.textContent = "End of Game";
             if (timerMode) {
@@ -128,58 +188,32 @@ function endRound(answer) {
 //     }
 // }
 
-function showCorrectAnswer(answer) {
+function showPopup(text, buttonText, onContinue = null) {
     const overlay = document.createElement("div");
     overlay.setAttribute("id", "overlay");
     containerScore.appendChild(overlay);
-    const correct = document.createElement("p");
-    correct.setAttribute("id", "correct");
-    containerScore.appendChild(correct);
+    const popupText = document.createElement("p");
+    popupText.setAttribute("id", "correct");
+    containerScore.appendChild(popupText);
     const continueButton = document.createElement("button");
     continueButton.setAttribute("id", "continueButton");
 
-    if (currentRound.roundIdx < 5) {
-        if (answer === currentRound.quessWasCorrect) {
-            correct.append("WELL DONE!");
-        } else {
-            correct.append("NOPE.");
-        }
-        containerScore.appendChild(continueButton);
-        continueButton.append("NEXT TASK!");
-        continueButton.addEventListener("click", () => {
-            // nextRound();
-            correct.parentNode.removeChild(correct);
-            continueButton.parentNode.removeChild(continueButton);
-            overlay.parentNode.removeChild(overlay);
-        })
-    } else {
-        correct.append("GAME OVER!");
-        containerScore.appendChild(continueButton);
-        continueButton.append("-> NEXT LEVEL!");
-        continueButton.addEventListener("click", () => {
-            correct.parentNode.removeChild(correct);
-            continueButton.parentNode.removeChild(continueButton);
-            overlay.parentNode.removeChild(overlay);
-            if (timerMode === false && timerModefast === false) {
-                showTimerMode();
-            } else {
-                showTimerModeFast();
-            }
-        })
-    }
+    popupText.append(text);
+
+    containerScore.appendChild(continueButton);
+    continueButton.append(buttonText);
+    continueButton.addEventListener("click", () => {
+        if (onContinue !== null) onContinue();
+        popupText.parentNode.removeChild(popupText);
+        continueButton.parentNode.removeChild(continueButton);
+        overlay.parentNode.removeChild(overlay);
+    });
 }
 
 function showTimerModeFast() {
-    // round = 1;
-    // updateRound();
-    // score = 0;
-    // updateScore();
     initGame();
     timerMode = false;
     timerModefast = true;
-    // clearInterval(countdownInterval);
-    // getViews(1);
-    // showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");
@@ -190,16 +224,9 @@ function showTimerModeFast() {
 }
 
 function showTimerMode() {
-    // round = 1;
-    // updateRound();
-    // score = 0;
-    // updateScore();
     initGame();
     timerModefast = false;
     timerMode = true;
-    // clearInterval(countdownInterval);
-    // getViews(1);
-    // showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");
@@ -220,75 +247,164 @@ const showSection = (sectionId) => {
     document.getElementById(sectionId).classList.remove("hidden");
 };
 
-document.getElementById("nav-home").addEventListener("click", () => {
-    showSection("home-view");
-});
+document.getElementById("nav-home").addEventListener("click", () => showSection("home-view"));
+document.getElementById("timer-game").addEventListener("click", () => showTimerMode());
+document.getElementById("timer-game-fast").addEventListener("click", () => showTimerModeFast());
+// Listener for game buttons
+document.getElementById("b1").addEventListener("click", () => endRound(1))
+document.getElementById("b2").addEventListener("click", () => endRound(2))
+document.getElementById("home-login").addEventListener("click", () => showSection("login-view"));
 
 document.getElementById("nav-leaderboard").addEventListener("click", () => {
-    showSection("leaderboard-view");
+    let cleanTBody = document.createElement("tbody");
+    cleanTBody.id = "leaderboard_tBody";
+    // nav_leaderboard_tBody.parentNode.replaceChild(cleanTBody, nav_leaderboard_tBody);
+    // nav_leaderboard_tBody = nav_leaderboard_table.bodies[0];
+
+    fetch("/leaderboard")
+        .then(response => response.json())
+        .then(data => {
+            // let tmpData = JSON.parse(data);
+            console.log(data);
+            let rankNumber = 1;
+            for (const entry of data) {
+                let row = nav_leaderboard_table.insertRow();
+                let rank = document.createElement("TD");
+                let username = document.createElement("TD");
+                let highscore = document.createElement("TD");
+                rank.appendChild(document.createTextNode((rankNumber++).toString()));
+                username.appendChild(document.createTextNode(entry.username));
+                highscore.appendChild(document.createTextNode(entry.highscore));
+                row.append(rank, username, highscore);
+            }
+            showSection("leaderboard-view");
+        })
+        .catch(error => console.log(error));
 });
 
-document.getElementById("nav-login").addEventListener("click", () => {
-    const sel_countryCode = document.getElementById("countryCode");
-    let sel_countryCode_option;
-    let sel_countryCode_option_text;
+function setSelectList(selectionNode, items) {
+    let sel_option;
+    let sel_option_text;
+    clearSelectList(selectionNode);
+    for (const item of items) {
+        sel_option = document.createElement("option");
+        sel_option.setAttribute("value", item);
 
+        sel_option_text = document.createTextNode(item);
+        sel_option.append(sel_option_text);
+
+        selectionNode.appendChild(sel_option);
+    }
+}
+
+
+nav_login.addEventListener("click", () => {
+    let sel_countryCode;
+    let nextView;
+
+    if (loggedUser) {
+        nextView = "profile-view";
+        sel_countryCode = document.getElementById("profile_form_countryCode");
+    } else {
+        nextView = "login-view";
+        sel_countryCode = document.getElementById("countryCode");
+    }
 
     fetch("/countryCodes")
         .then(response => response.json())
-        .then(data => {
-            clearCountryCodes(sel_countryCode);
-            for (const countryCodeValue of data) {
-                sel_countryCode_option = document.createElement("option");
-                sel_countryCode_option.setAttribute("value", countryCodeValue);
-
-                sel_countryCode_option_text = document.createTextNode(countryCodeValue);
-                sel_countryCode_option.append(sel_countryCode_option_text);
-
-                sel_countryCode.appendChild(sel_countryCode_option);
-            }
-        })
+        .then(data => setSelectList(sel_countryCode, data))
         .catch(error => console.log(error));
 
-    showSection("login-view");
+    showSection(nextView);
 });
 
-document.getElementById("login-form").addEventListener("submit", (e) => {
-    e.preventDefault();
+function setUserInfo(username) {
 
+}
+
+form_login.addEventListener("submit", () => {
     const input_username = document.getElementById("username");
     const input_password = document.getElementById("password");
     const sel_countryCode = document.getElementById("countryCode");
 
-    if (input_username.value === "" || input_password.value === "") alert("Ensure you input a value in both fields!");
-    else {
-        alert("Welcome [" + input_username.value + "]");
 
-        const xhr = new XMLHttpRequest();
-        xhr.onload = () => {
-            document.getElementById("login-form").reset();
-            clearCountryCodes(sel_countryCode);
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            let tmpUser = JSON.parse(xhr.response);
 
-            showSection("leaderboard-view");
-        };
-        xhr.open("POST", "/user");
-        xhr.setRequestHeader("username", input_username.value);
-        xhr.setRequestHeader("password", input_password.value);
-        xhr.setRequestHeader("countryCode", sel_countryCode.value);
-        xhr.send();
-    }
+            loggedUser = { ...userScheme };
+            loggedUser.username = tmpUser.username;
+            loggedUser.highscore = tmpUser.highscore;
+            loggedUser.countryCode = tmpUser.countryCode;
+            loggedUser.gameSettings = tmpUser.gameSettings;
+            loggedUser.style = tmpUser.style;
+
+            nav_login.textContent = input_username.value;
+            nav_home_login.textContent = input_username.value;
+            form_login.reset();
+            showSection("profile-view");
+
+            alert("Welcome [" + input_username.value + "]");
+        } else {
+            alert(`[${input_username.value}] invalid password`);
+        }
+    };
+    xhr.open("POST", "/user");
+    xhr.setRequestHeader("user", JSON.stringify({ username: input_username.value, password: input_password.value, countryCode: sel_countryCode.value }));
+    xhr.send();
 });
 
-function clearCountryCodes(sel_countryCode) {
-    for (let i = 0; i <= sel_countryCode.options.length; i++) {
-        sel_countryCode.options[i] = null;
+form_profile.addEventListener("submit", () => {
+    let tmpProfile = {
+        username: profile_form_username.value,
+        countryCode: profile_form_countryCode.value,
+        maxRounds: profile_form_maxRounds.value,
+        roundTime: profile_form_roundTime.value,
+        roundTimeFast: profile_form_roundTimeFast.value
     }
+
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            alert("Profile saved!");
+        } else {
+            console.log("sry: form_profile/submit");
+        }
+    };
+    xhr.open("PUT", "/profile");
+    xhr.setRequestHeader("profile", JSON.stringify(tmpProfile));
+    xhr.send();
+})
+
+form_profile_deleteAccount.addEventListener("click", () => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            alert("User data deleted!");
+        } else {
+            console.log("sry: form_profile_deleteAccount/click");
+        }
+    };
+    xhr.open("DELETE", "/deregister");
+    xhr.send();
+})
+
+function clearSelectList(selectionNode) {
+    for (let i = 0; i <= selectionNode.options.length; i++) selectionNode.options[i] = null;
 }
 
 function initGame() {
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {
+        console.log(xhr.response);
+        if (xhr.response === "") {
+            alert("NOPE");
+            return;
+        }
+
         let tmpRound = JSON.parse(xhr.response);
+
 
         currentRound.roundIdx = tmpRound.roundIdx;
         currentRound.question = tmpRound.question;
@@ -320,12 +436,6 @@ function initGame() {
 document.getElementById("quick-game").addEventListener("click", () => {
     initGame();
     timerMode = false;
-    // round = 1;
-    // updateRound();
-    // score = 0;
-    // updateScore();
-    // getViews(1);
-    // showSection("game-view");
     if (timerElement) {
         timerElement.parentNode.removeChild(timerElement);
         timerElement = null;
@@ -333,15 +443,8 @@ document.getElementById("quick-game").addEventListener("click", () => {
 });
 
 document.getElementById("timer-game").addEventListener("click", () => {
-    // round = 1;
-    // updateRound();
-    // score = 0;
-    // updateScore();
     initGame();
     timerMode = true;
-    // clearInterval(countdownInterval);
-    // getViews(1);
-    // showSection("game-view");
     if (!timerElement) {
         timerElement = document.createElement("p");
         timerElement.setAttribute("id", "timer-id");
@@ -350,27 +453,6 @@ document.getElementById("timer-game").addEventListener("click", () => {
         timerElement.append("Countdown: ");
     }
 });
-
-document.getElementById("home-login").addEventListener("click", () => {
-    showSection("login-view");
-});
-
-document.getElementById("timer-game").addEventListener("click", () => {
-    showTimerMode();
-});
-
-
-document.getElementById("timer-game-fast").addEventListener("click", () => {
-    showTimerModeFast();
-});
-
-// Listener for game buttons
-document.getElementById("b1").addEventListener("click", () => {
-    endRound(1);
-})
-document.getElementById("b2").addEventListener("click", () => {
-    endRound(2);
-})
 
 // Show the home view by default
 showSection("home-view");
