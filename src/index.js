@@ -39,8 +39,6 @@ let userScheme = {
         score: 0
     }
 };
-let loggedUser = null;
-
 //::::::::DOM::::::::
 // nav
 const nav_login = document.getElementById("nav-login");
@@ -51,14 +49,15 @@ let nav_home_login = document.getElementById("home-login");
 // profile and login
 // profile
 const form_profile = document.getElementById("profile_form");
-const form_profile_username = document.getElementById("profile_username");
 const profile_form_username = document.getElementById("profile_form_username");
 const profile_form_password = document.getElementById("profile_form_password");
+const profile_form_highscore = document.getElementById("profile_form_highscore");
 const profile_form_countryCode = document.getElementById("profile_form_countryCode");
 const profile_form_maxRounds = document.getElementById("profile_form_maxRounds");
 const profile_form_roundTime = document.getElementById("profile_form_roundTime");
 const profile_form_roundTimeFast = document.getElementById("profile_form_roundTimeFast");
 const form_profile_deleteAccount = document.getElementById("profile_form_deleteAccount");
+const mainView_logout = document.getElementById("mainView_logout");
 // login
 let form_login = document.getElementById("login-form");
 
@@ -71,9 +70,9 @@ let nav_leaderboard_tBody = document.getElementById("leaderboard_tBody");
 setOnLoad();
 
 function setOnLoad() {
-    if (loggedUser) {
-        nav_login.value = loggedUser.username;
-    }
+    getLoggedUser((user) => {
+        if (user) nav_login.innerText = user.username;
+    });
 }
 
 function getViews(round, containerID1 = "mly1", containerID2 = "mly2") {
@@ -203,7 +202,7 @@ function showPopup(text, buttonText, onContinue = null) {
     containerScore.appendChild(continueButton);
     continueButton.append(buttonText);
     continueButton.addEventListener("click", () => {
-        if (onContinue !== null) onContinue();
+        if (onContinue) onContinue();
         popupText.parentNode.removeChild(popupText);
         continueButton.parentNode.removeChild(continueButton);
         overlay.parentNode.removeChild(overlay);
@@ -256,16 +255,19 @@ document.getElementById("b2").addEventListener("click", () => endRound(2))
 document.getElementById("home-login").addEventListener("click", () => showSection("login-view"));
 
 document.getElementById("nav-leaderboard").addEventListener("click", () => {
-    let cleanTBody = document.createElement("tbody");
-    cleanTBody.id = "leaderboard_tBody";
-    // nav_leaderboard_tBody.parentNode.replaceChild(cleanTBody, nav_leaderboard_tBody);
+    nav_leaderboard_tBody = document.createElement("tbody");
+    // cleanTBody.id = "leaderboard_tBody";
+    // document.getElementById("leaderboard_tBody").empty();
+    // nav_leaderboard_tBody = cleanTBody;
+    // nav_leaderboard_tBody.setAttribute("parentNode", nav_leaderboard_table.toString());
+
+    // nav_leaderboard_tBody = document.getElementById("leaderboard_tBody");
     // nav_leaderboard_tBody = nav_leaderboard_table.bodies[0];
 
     fetch("/leaderboard")
         .then(response => response.json())
         .then(data => {
             // let tmpData = JSON.parse(data);
-            console.log(data);
             let rankNumber = 1;
             for (const entry of data) {
                 let row = nav_leaderboard_table.insertRow();
@@ -282,6 +284,10 @@ document.getElementById("nav-leaderboard").addEventListener("click", () => {
         .catch(error => console.log(error));
 });
 
+function clearSelectList(selectionNode) {
+    for (let i = 0; i <= selectionNode.options.length; i++) selectionNode.options[i] = null;
+}
+
 function setSelectList(selectionNode, items) {
     let sel_option;
     let sel_option_text;
@@ -297,32 +303,51 @@ function setSelectList(selectionNode, items) {
     }
 }
 
+function getLoggedUser(next = null) {
+    let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if (next) next(JSON.parse(xhr.response));
+        else return null;
+    }
+    xhr.open("GET", "/sessionUser");
+    xhr.send();
+}
 
 nav_login.addEventListener("click", () => {
     let sel_countryCode;
     let nextView;
 
-    if (loggedUser) {
-        nextView = "profile-view";
-        sel_countryCode = document.getElementById("profile_form_countryCode");
-    } else {
-        nextView = "login-view";
-        sel_countryCode = document.getElementById("countryCode");
-    }
+    getLoggedUser((user) => {
+        if (user) {
+            setProfileInfo(user);
+            nextView = "profile-view";
+            sel_countryCode = document.getElementById("profile_form_countryCode");
+        } else {
+            nextView = "login-view";
+            sel_countryCode = document.getElementById("countryCode");
+        }
 
-    fetch("/countryCodes")
-        .then(response => response.json())
-        .then(data => setSelectList(sel_countryCode, data))
-        .catch(error => console.log(error));
+        fetch("/countryCodes")
+            .then(response => response.json())
+            .then(data => setSelectList(sel_countryCode, data))
+            .catch(error => console.log(error));
 
-    showSection(nextView);
+        showSection(nextView);
+    });
 });
 
-function setUserInfo(username) {
-
+function setProfileInfo(user) {
+    profile_form_username.innerText = user.username;
+    profile_form_highscore.innerText = user.highscore;
+    profile_form_countryCode.value = user.countryCode;
+    profile_form_maxRounds.value = user.gameSettings.maxRounds;
+    profile_form_roundTime.value = user.gameSettings.roundTime;
+    profile_form_roundTimeFast.value = user.gameSettings.roundTimeFast;
 }
 
-form_login.addEventListener("submit", () => {
+form_login.addEventListener("submit", (e) => {
+    e.preventDefault();
+
     const input_username = document.getElementById("username");
     const input_password = document.getElementById("password");
     const sel_countryCode = document.getElementById("countryCode");
@@ -331,33 +356,29 @@ form_login.addEventListener("submit", () => {
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {
         if (xhr.status === 200) {
-            let tmpUser = JSON.parse(xhr.response);
-
-            loggedUser = { ...userScheme };
-            loggedUser.username = tmpUser.username;
-            loggedUser.highscore = tmpUser.highscore;
-            loggedUser.countryCode = tmpUser.countryCode;
-            loggedUser.gameSettings = tmpUser.gameSettings;
-            loggedUser.style = tmpUser.style;
-
-            nav_login.textContent = input_username.value;
-            nav_home_login.textContent = input_username.value;
-            form_login.reset();
+            nav_login.innerText = input_username.value;
+            getLoggedUser((user) => setProfileInfo(user));
             showSection("profile-view");
 
             alert("Welcome [" + input_username.value + "]");
+            form_login.reset();
         } else {
             alert(`[${input_username.value}] invalid password`);
         }
     };
     xhr.open("POST", "/user");
-    xhr.setRequestHeader("user", JSON.stringify({ username: input_username.value, password: input_password.value, countryCode: sel_countryCode.value }));
+    xhr.setRequestHeader("user", JSON.stringify({
+        username: input_username.value,
+        password: input_password.value,
+        countryCode: sel_countryCode.value
+    }));
     xhr.send();
 });
 
-form_profile.addEventListener("submit", () => {
+form_profile.addEventListener("submit", (e) => {
+    e.preventDefault();
+
     let tmpProfile = {
-        username: profile_form_username.value,
         countryCode: profile_form_countryCode.value,
         maxRounds: profile_form_maxRounds.value,
         roundTime: profile_form_roundTime.value,
@@ -368,6 +389,7 @@ form_profile.addEventListener("submit", () => {
     xhr.onload = () => {
         if (xhr.status === 200) {
             alert("Profile saved!");
+            // getLoggedUser((user) => setProfileInfo(user));
         } else {
             console.log("sry: form_profile/submit");
         }
@@ -389,10 +411,6 @@ form_profile_deleteAccount.addEventListener("click", () => {
     xhr.open("DELETE", "/deregister");
     xhr.send();
 })
-
-function clearSelectList(selectionNode) {
-    for (let i = 0; i <= selectionNode.options.length; i++) selectionNode.options[i] = null;
-}
 
 function initGame() {
     const xhr = new XMLHttpRequest();

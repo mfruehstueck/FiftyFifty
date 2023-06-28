@@ -119,15 +119,15 @@
 
     <!-- Profile view -->
     <section id="profile-view" class="hidden">
-        <h2 id="profile_username">Username</h2>
+        <h2>Profile</h2>
         <form id="profile_form" action="">
             <label>Username: <label id="profile_form_username"></label></label>
             <label>Password: <label id="profile_form_password">********</label></label>
             <label>Highscore: <label id="profile_form_highscore">0</label></label>
             <label for="profile_form_countryCode">Country Code: </label><select id="profile_form_countryCode"></select>
-            <label for="profile_form_maxRounds">Max Rounds: </label><input type="number" id="profile_form_maxRounds" placeholder="Enter max rounds" required>
-            <label for="profile_form_roundTime">Round Time: </label><input type="number" id="profile_form_roundTime" placeholder="Enter round time" required>
-            <label for="profile_form_roundTimeFast">Round Time Fast: </label><input type="number" id="profile_form_roundTimeFast" placeholder="Enter fast round time" required>
+            <label for="profile_form_maxRounds">Max Rounds: </label><input type="number" id="profile_form_maxRounds" placeholder="Enter max rounds" min="5" required>
+            <label for="profile_form_roundTime">Round Time: </label><input type="number" id="profile_form_roundTime" placeholder="Enter round time" min="5" required>
+            <label for="profile_form_roundTimeFast">Round Time Fast: </label><input type="number" id="profile_form_roundTimeFast" placeholder="Enter fast round time" min="3" required>
             <button type="submit">Save</button>
             <button id="profile_form_deleteAccount">Delete Account!</button>
         </form>

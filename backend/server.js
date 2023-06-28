@@ -11,7 +11,7 @@ const northernIds = require("./northernIds.js");
 const southernIds = require("./southernIds.js");
 // for csv parsing
 const fs = require("fs");
-const { parse } = require("csv-parse");
+const {parse} = require("csv-parse");
 
 const app = express();
 
@@ -29,19 +29,19 @@ app.use(express.static(path.join(__dirname, '..', 'src')));
 app.use(sessions({
         secret: process.env.SESSION_SECRET,
         saveUninitialized: true,
-        cookie: { maxAge: parseMathExpression(process.env.SESSION_MAXAGE) },
+        cookie: {maxAge: parseMathExpression(process.env.SESSION_MAXAGE)},
         resave: false
     })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.static(__dirname));
 app.use(cookieParser());
 
 // parse cities from csv-file
 const result = [];
 fs.createReadStream("./worldcities.csv")
-    .pipe(parse({ delimiter: ",", from_line: 2 }))
+    .pipe(parse({delimiter: ",", from_line: 2}))
     .on("data", function (row) {
         //console.log(row);
         result.push(row);
@@ -165,7 +165,7 @@ function validateUser(username, password, countryCode) {
     } else {
         console.log(`[${username}] does not exist`);
 
-        tmpUser = { ...user };
+        tmpUser = {...user};
         tmpUser.username = username;
         tmpUser.password = password;
         tmpUser.countryCode = countryCode;
@@ -182,6 +182,17 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '..', 'src', 'main.html'));
 });
 
+function getUserWithSession(checkSession) {
+    session = checkSession;
+    return getUser(session.username);
+}
+
+app.get("/sessionUser", (req, res) => {
+    session = req.session;
+    console.log("currentSession: " + session.username);
+    res.status(200).send(JSON.stringify(getUserWithSession(session)));
+});
+
 app.get("/countryCodes", (req, res) => {
     res.send([
         "nop",
@@ -191,7 +202,22 @@ app.get("/countryCodes", (req, res) => {
 });
 
 app.put("/profile", (req, res) => {
-    console.log(req.header("profile"));
+    let tmpUser = getUser(req.session.username);
+    let tmpProfile = JSON.parse(req.header("profile"));
+    console.log("PROFILE");
+    console.log(tmpUser);
+    console.log(tmpProfile);
+    if (tmpUser) {
+        tmpUser.countryCode = tmpProfile.countryCode;
+        tmpUser.gameSettings.maxRounds = tmpProfile.maxRounds;
+        tmpUser.gameSettings.roundTime = tmpProfile.roundTime;
+        tmpUser.gameSettings.roundTimeFast = tmpProfile.roundTimeFast;
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(400);
+    }
+    console.log(tmpUser);
+    console.log("PROFILE");
 });
 
 app.post("/user", (req, res) => {
@@ -203,13 +229,11 @@ app.post("/user", (req, res) => {
 
     user = validateUser(username, password, countryCode);
 
-
-    if (user !== null) {
+    if (user) {
         session = req.session;
         session.username = user.username;
 
-        res.status(200);
-        res.send()
+        res.sendStatus(200);
     } else {
         console.log(`[${username}] invalid password`);
         res.sendStatus(401);
@@ -222,7 +246,7 @@ app.get("/users", (req, res) => {
 
 app.post("/logout", (req, res) => {
     req.session.destroy();
-    return res.status(204).json({ info: `[${user.name}] logged out` });
+    return res.status(204).json({info: `[${user.name}] logged out`});
 });
 
 app.delete("/deregister", (req, res) => {
@@ -237,14 +261,14 @@ let leaderboardList = [];
 function updateLeaderboard(user) {
     leaderboardList = [];
 
-    for (const u of userList) leaderboardList.push({ username: u.username, highscore: u.highscore });
+    for (const u of userList) leaderboardList.push({username: u.username, highscore: u.highscore});
 
     leaderboardList.sort((a, b) => a.highscore - b.highscore);
 }
 
-leaderboardList.push({ username: "test1", highscore: 100 });
-leaderboardList.push({ username: "test2", highscore: 500 });
-leaderboardList.push({ username: "test3", highscore: 3 });
+leaderboardList.push({username: "test1", highscore: 100});
+leaderboardList.push({username: "test2", highscore: 500});
+leaderboardList.push({username: "test3", highscore: 3});
 
 app.get("/leaderboard", (req, res) => {
     res.send(leaderboardList);
