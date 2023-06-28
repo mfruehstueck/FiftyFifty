@@ -239,7 +239,6 @@ const showSection = (sectionId) => {
     // Hide all sections
     document.querySelectorAll("main > section").forEach((section) => {
         section.classList.add("hidden");
-
     });
 
     // Show the selected section
@@ -255,14 +254,11 @@ document.getElementById("b2").addEventListener("click", () => endRound(2))
 document.getElementById("home-login").addEventListener("click", () => showSection("login-view"));
 
 document.getElementById("nav-leaderboard").addEventListener("click", () => {
-    nav_leaderboard_tBody = document.createElement("tbody");
-    // cleanTBody.id = "leaderboard_tBody";
-    // document.getElementById("leaderboard_tBody").empty();
-    // nav_leaderboard_tBody = cleanTBody;
-    // nav_leaderboard_tBody.setAttribute("parentNode", nav_leaderboard_table.toString());
-
-    // nav_leaderboard_tBody = document.getElementById("leaderboard_tBody");
-    // nav_leaderboard_tBody = nav_leaderboard_table.bodies[0];
+    // nav_leaderboard_tBody = document.createElement("tbody");
+    let tmp = nav_leaderboard_tBody.getElementsByTagName("tr");
+    for (const row of tmp) {
+        row.remove();
+    }
 
     fetch("/leaderboard")
         .then(response => response.json())

@@ -79,7 +79,7 @@ app.get("/StreetViewsPls", async function (req, res) {
     };
 
     const tmpUser = getUser(req.session.username);
-    if (tmpUser === null) {
+    if (!tmpUser) {
         console.log("NOPE");
 
         currentRound = null;
@@ -98,6 +98,8 @@ app.get("/StreetViewsPls", async function (req, res) {
 
             currentRound.currentScore = tmpUser.game.score;
             currentRound.gameWon = true;
+
+            updateLeaderboard();
         } else {
             console.log("NEXT");
             // if (req.headers.guess == rounds[tmpUser.game.round].correct) {
@@ -209,7 +211,7 @@ app.put("/profile", (req, res) => {
     console.log(tmpProfile);
     if (tmpUser) {
         tmpUser.countryCode = tmpProfile.countryCode;
-        tmpUser.gameSettings.maxRounds = tmpProfile.maxRounds;
+        tmpUser.gameSettings.maxRounds = tmpProfile.maxRounds - 1;
         tmpUser.gameSettings.roundTime = tmpProfile.roundTime;
         tmpUser.gameSettings.roundTimeFast = tmpProfile.roundTimeFast;
         res.sendStatus(200);
@@ -258,12 +260,10 @@ app.delete("/deregister", (req, res) => {
 // leaderboard
 let leaderboardList = [];
 
-function updateLeaderboard(user) {
+function updateLeaderboard() {
     leaderboardList = [];
 
     for (const u of userList) leaderboardList.push({username: u.username, highscore: u.highscore});
-
-    leaderboardList.sort((a, b) => a.highscore - b.highscore);
 }
 
 leaderboardList.push({username: "test1", highscore: 100});
@@ -271,6 +271,7 @@ leaderboardList.push({username: "test2", highscore: 500});
 leaderboardList.push({username: "test3", highscore: 3});
 
 app.get("/leaderboard", (req, res) => {
+    leaderboardList.sort((a, b) => b.highscore - a.highscore);
     res.send(leaderboardList);
     console.log("leaderboard:");
     console.log(leaderboardList);
