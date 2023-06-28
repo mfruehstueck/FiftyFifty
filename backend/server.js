@@ -4,26 +4,20 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require('express');
 const path = require('path');
-// const bodyParser = require('body-parser');
-// const rounds = require("./rounds.js");
 const randomIds = require("./randomIds.js");
 const northernIds = require("./northernIds.js");
 const southernIds = require("./southernIds.js");
 // for csv parsing
 const fs = require("fs");
-const {parse} = require("csv-parse");
 
 const app = express();
 
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
 
-// Parse urlencoded bodies
-// app.use(bodyParser.json());
 
 // Serve static content in directory 'files'
 app.use(express.static(path.join(__dirname, '..', 'src')));
-// app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 //session
 app.use(sessions({
@@ -38,16 +32,15 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(__dirname));
 app.use(cookieParser());
 
-// parse cities from csv-file
-const result = [];
-fs.createReadStream("./worldcities.csv")
-    .pipe(parse({delimiter: ",", from_line: 2}))
-    .on("data", function (row) {
-        //console.log(row);
-        result.push(row);
-    })
-    .on("end", () => {
-    });
+// // parse cities from csv-file
+// const result = [];
+// fs.createReadStream("./worldcities.csv")
+//     .pipe(parse({delimiter: ",", from_line: 2}))
+//     .on("data", function (row) {
+//         result.push(row);
+//     })
+//     .on("end", () => {
+//     });
 
 app.get("/StreetViewsPls", async function (req, res) {
     // game rounds
@@ -65,7 +58,6 @@ app.get("/StreetViewsPls", async function (req, res) {
     }
 
     console.log(":::::::StreetViewsPls:::::::");
-    console.log(req.session.username);
 
     let currentRound = {
         roundIdx: 0,
@@ -84,11 +76,17 @@ app.get("/StreetViewsPls", async function (req, res) {
 
         currentRound = null;
     } else {
-        currentRound.roundTime = tmpUser.game.roundTime;
         if (tmpUser.game.round < 0 || req.header("roundIdx") < 0) {
             console.log("START");
             tmpUser.game.round = 0;
             tmpUser.game.score = 0;
+            if (tmpUser.game.type === 0) {
+                currentRound.roundTime = 0;
+            } else if (tmpUser.game.type === 1) {
+                currentRound.roundTime = tmpUser.gameSettings.roundTime;
+            } else if (tmpUser.game.type === 2) {
+                currentRound.roundTime = tmpUser.gameSettings.roundTimeFast;
+            }
 
         } else if (tmpUser.game.round >= tmpUser.gameSettings.maxRounds) {
             console.log("WON");
@@ -97,12 +95,11 @@ app.get("/StreetViewsPls", async function (req, res) {
             tmpUser.game.round = -1;
 
             currentRound.currentScore = tmpUser.game.score;
-            currentRound.gameWon = true;
 
             updateLeaderboard();
         } else {
+            if (tmpUser.game.round >= tmpUser.gameSettings.maxRounds - 1) currentRound.gameWon = true;
             console.log("NEXT");
-            // if (req.headers.guess == rounds[tmpUser.game.round].correct) {
             if (req.headers.guess == tmpRound.correct) {
                 tmpUser.game.score += 100;
                 currentRound.quessWasCorrect = true;
@@ -138,9 +135,13 @@ let user = {
         roundTimeFast: 20
     },
 
+    // type
+    // 0...default
+    // 1...time
+    // 2...timeFast
     game: {
         round: -1,
-        roundTime: 30,
+        type: 0,
         score: 0
     }
 };
@@ -185,8 +186,7 @@ app.get('/', function (req, res) {
 });
 
 function getUserWithSession(checkSession) {
-    session = checkSession;
-    return getUser(session.username);
+    return getUser(checkSession.username);
 }
 
 app.get("/sessionUser", (req, res) => {
@@ -196,11 +196,7 @@ app.get("/sessionUser", (req, res) => {
 });
 
 app.get("/countryCodes", (req, res) => {
-    res.send([
-        "nop",
-        "Austria",
-        "Australia"
-    ]);
+    res.send(["nop", "United States", "Canada", "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and/or Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Cook Islands", "Costa Rica", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecudaor", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "France, Metropolitan", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and Mc Donald Islands", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic of", "Korea, Republic of", "Kosovo", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Moldova, Republic of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfork Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia South Sandwich Islands", "South Sudan", "Spain", "Sri Lanka", "St. Helena", "St. Pierre and Miquelon", "Sudan", "Suriname", "Svalbarn and Jan Mayen Islands", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan", "Tajikistan", "Tanzania, United Republic of", "Thailand", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States minor outlying islands", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City State", "Venezuela", "Vietnam", "Virigan Islands (British)", "Virgin Islands (U.S.)", "Wallis and Futuna Islands", "Western Sahara", "Yemen", "Yugoslavia", "Zaire", "Zambia", "Zimbabwe"]);
 });
 
 app.put("/profile", (req, res) => {

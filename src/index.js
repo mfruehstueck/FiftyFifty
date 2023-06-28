@@ -139,34 +139,29 @@ function endRound(answer) {
         currentRound.currentScore = tmpRound.currentScore;
         currentRound.quessWasCorrect = tmpRound.quessWasCorrect;
 
-        console.log("currentRound answer: " + answer);
-        console.log(currentRound);
-
         updateRound();
         updateScore();
 
-        const questionElement = document.getElementById('question');
-        questionElement.innerText = currentRound.question;
-        if (timerMode === true || timerModefast === true) {
-            startCountdown();
-        }
-
+        let info = (currentRound.quessWasCorrect && answer) ? "WELL DONE!" : "NOPE";
         if (tmpRound.gameWon !== true) {
-            let info = (currentRound.quessWasCorrect) ? "WELL DONE!" : "NOPE";
-            showPopup(info, "NEXT TASK!");
-
-            getViews(currentRound);
+            showPopup(info, "NEXT TASK!", () => {
+                const questionElement = document.getElementById('question');
+                questionElement.innerText = currentRound.question;
+                if (timerMode === true || timerModefast === true) {
+                    startCountdown();
+                }
+                getViews(currentRound);
+            });
         } else {
-            showPopup("GAME OVER WITH: " + currentRound.currentScore, "-> NEXT LEVEL!");
-            const roundElement = document.getElementById('round-id');
-            roundElement.textContent = "End of Game";
-            if (timerMode) {
-                clearInterval(countdownInterval);
-                timerElement.textContent = "Time is up!";
-            }
-            console.log('End of Game');
-            console.log('Final Score: ' + currentRound.currentScore + ' Points');
-            showSection("home-view");
+            showPopup(info, "END OF GAME!", () => {
+                showPopup("GAME OVER WITH: " + currentRound.currentScore, "-> TO HOME!", () => {
+                    if (timerMode) {
+                        clearInterval(countdownInterval);
+                        timerElement.textContent = "Time is up!";
+                    }
+                    showSection("home-view");
+                });
+            });
         }
     };
     xhr.open("GET", "/StreetViewsPls");
@@ -210,7 +205,7 @@ function showPopup(text, buttonText, onContinue = null) {
 }
 
 function showTimerModeFast() {
-    initGame();
+    initGame(2);
     timerMode = false;
     timerModefast = true;
     if (!timerElement) {
@@ -223,7 +218,7 @@ function showTimerModeFast() {
 }
 
 function showTimerMode() {
-    initGame();
+    initGame(1);
     timerModefast = false;
     timerMode = true;
     if (!timerElement) {
@@ -297,6 +292,7 @@ function setSelectList(selectionNode, items) {
 
         selectionNode.appendChild(sel_option);
     }
+    selectionNode.options[0].selected = "selected";
 }
 
 function getLoggedUser(next = null) {
@@ -385,7 +381,6 @@ form_profile.addEventListener("submit", (e) => {
     xhr.onload = () => {
         if (xhr.status === 200) {
             alert("Profile saved!");
-            // getLoggedUser((user) => setProfileInfo(user));
         } else {
             console.log("sry: form_profile/submit");
         }
@@ -400,6 +395,7 @@ form_profile_deleteAccount.addEventListener("click", () => {
     xhr.onload = () => {
         if (xhr.status === 200) {
             alert("User data deleted!");
+            window.location.href = "/";
         } else {
             console.log("sry: form_profile_deleteAccount/click");
         }
@@ -413,12 +409,11 @@ function initGame() {
     xhr.onload = () => {
         console.log(xhr.response);
         if (xhr.response === "") {
-            alert("NOPE");
+            alert("Please Login");
             return;
         }
 
         let tmpRound = JSON.parse(xhr.response);
-
 
         currentRound.roundIdx = tmpRound.roundIdx;
         currentRound.question = tmpRound.question;
@@ -435,6 +430,7 @@ function initGame() {
         const questionElement = document.getElementById('question');
         questionElement.innerText = currentRound.question;
         if (timerMode === true || timerModefast === true) {
+            clearInterval(countdownInterval);
             startCountdown();
         }
 
@@ -444,11 +440,14 @@ function initGame() {
     }
     xhr.open("GET", "/StreetViewsPls");
     xhr.setRequestHeader("roundIdx", "-1");
-    xhr.send();
+    getLoggedUser((user) => {
+        xhr.setRequestHeader("type", user.game.type)
+        xhr.send();
+    });
 }
 
 document.getElementById("quick-game").addEventListener("click", () => {
-    initGame();
+    initGame(0);
     timerMode = false;
     if (timerElement) {
         timerElement.parentNode.removeChild(timerElement);
@@ -457,7 +456,7 @@ document.getElementById("quick-game").addEventListener("click", () => {
 });
 
 document.getElementById("timer-game").addEventListener("click", () => {
-    initGame();
+    initGame(1);
     timerMode = true;
     if (!timerElement) {
         timerElement = document.createElement("p");

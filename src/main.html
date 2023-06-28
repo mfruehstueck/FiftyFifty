@@ -72,7 +72,7 @@
     <!-- Game view -->
     <section id="game-view">
         <div id="score"></div>
-        <h2 id="question"></h2>
+        <h2 id="question">Question</h2>
         <div class="containers">
             <div class="image-container1">
                 <div id="mly1" style="width: 45vw; height: 55vh;"></div>
@@ -98,6 +98,7 @@
             <tr>
                 <th>Rank</th>
                 <th>Username</th>
+                <th>CountryCode</th>
                 <th>Score</th>
             </tr>
             </thead>
@@ -109,7 +110,7 @@
     <section id="login-view" class="hidden">
         <h2>Login</h2>
         <!-- action="/user" method="post" -->
-        <form id="login-form" action="">
+        <form id="login-form">
             <label for="username">Username:</label><input type="text" id="username" placeholder="Enter your username..." required/>
             <label for="password">Password:</label><input type="password" id="password" placeholder="Enter your password..." required/>
             <label for="countryCode">Country Code:</label><select id="countryCode" ></select>
@@ -120,12 +121,12 @@
     <!-- Profile view -->
     <section id="profile-view" class="hidden">
         <h2>Profile</h2>
-        <form id="profile_form" action="">
-            <label>Username: <label id="profile_form_username"></label></label>
-            <label>Password: <label id="profile_form_password">********</label></label>
-            <label>Highscore: <label id="profile_form_highscore">0</label></label>
+        <form id="profile_form">
+            <label>Username: </label><label id="profile_form_username"></label>
+            <label>Password: </label><label id="profile_form_password">********</label>
+            <label>Highscore: </label><label id="profile_form_highscore">0</label>
             <label for="profile_form_countryCode">Country Code: </label><select id="profile_form_countryCode"></select>
-            <label for="profile_form_maxRounds">Max Rounds: </label><input type="number" id="profile_form_maxRounds" placeholder="Enter max rounds" min="5" required>
+            <label for="profile_form_maxRounds">Max Rounds: </label><input type="number" id="profile_form_maxRounds" placeholder="Enter max rounds" min="4" required>
             <label for="profile_form_roundTime">Round Time: </label><input type="number" id="profile_form_roundTime" placeholder="Enter round time" min="5" required>
             <label for="profile_form_roundTimeFast">Round Time Fast: </label><input type="number" id="profile_form_roundTimeFast" placeholder="Enter fast round time" min="3" required>
             <button type="submit">Save</button>
