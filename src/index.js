@@ -169,19 +169,6 @@ function endRound(answer) {
     xhr.send();
 }
 
-// function nextRound() {
-//     if (round >= 5) {
-//         const roundElement = document.getElementById('round-id');
-//         roundElement.textContent = "End of Game";
-//         clearInterval(countdownInterval);
-//         timerElement.textContent = "Time is up!";
-//     } else {
-//         round++;
-//         updateRound();
-//         getViews(round);
-//     }
-// }
-
 function showPopup(text, buttonText, onContinue = null) {
     const overlay = document.createElement("div");
     overlay.setAttribute("id", "overlay");
@@ -349,11 +336,18 @@ form_login.addEventListener("submit", (e) => {
     xhr.onload = () => {
         if (xhr.status === 200) {
             nav_login.innerText = input_username.value;
-            getLoggedUser((user) => setProfileInfo(user));
-            showSection("profile-view");
-
-            alert("Welcome [" + input_username.value + "]");
-            form_login.reset();
+            getLoggedUser((user) => {
+                fetch("/countryCodes")
+                    .then(response => response.json())
+                    .then(data => {
+                        setSelectList(profile_form_countryCode, data)
+                        setProfileInfo(user);
+                        showSection("profile-view");
+                        alert("Welcome [" + input_username.value + "]");
+                        form_login.reset();
+                    })
+                    .catch(error => console.log(error));
+            });
         } else {
             alert(`[${input_username.value}] invalid password`);
         }

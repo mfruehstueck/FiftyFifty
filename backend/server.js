@@ -244,7 +244,8 @@ app.get("/users", (req, res) => {
 
 app.post("/logout", (req, res) => {
     req.session.destroy();
-    return res.status(204).json({info: `[${user.name}] logged out`});
+    res.redirect("/");
+    return res.sendStatus(204);
 });
 
 app.delete("/deregister", (req, res) => {
@@ -261,10 +262,6 @@ function updateLeaderboard() {
 
     for (const u of userList) leaderboardList.push({username: u.username, highscore: u.highscore});
 }
-
-leaderboardList.push({username: "test1", highscore: 100});
-leaderboardList.push({username: "test2", highscore: 500});
-leaderboardList.push({username: "test3", highscore: 3});
 
 app.get("/leaderboard", (req, res) => {
     leaderboardList.sort((a, b) => b.highscore - a.highscore);
