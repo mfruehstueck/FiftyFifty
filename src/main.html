@@ -5,18 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fifty/Fifty</title>
-    <link rel="icon" type="image/x-icon" href="/img/favicon.png">
+
+    <link rel="icon" type="image/x-icon" href="./img/favicon.png">
     <link rel="stylesheet" href="main.css"/>
-    <link
-            href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
-            rel="stylesheet"
-    />
-    <script src="main.js" defer></script>
+    <link href="https://unpkg.com/mapillary-js@4.1.0/dist/mapillary.css"
+          rel="stylesheet"/>
     <!-- icons -->
-    <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"/>
+    <script src="main.js" defer></script>
     <script src="getLocation.js" defer></script>
 </head>
 <body class="light-theme">
@@ -78,12 +75,12 @@
         <h2 id="question"></h2>
         <div class="containers">
             <div class="image-container1">
-                    <div id="mly1" style="width: 45vw; height: 55vh;"></div>
-                    <button data-option="1" id="b1">Option 1</button>
+                <div id="mly1" style="width: 45vw; height: 55vh;"></div>
+                <button data-option="1" id="b1">Option 1</button>
             </div>
             <div class="image-container2">
-                    <div id="mly2" style="width: 45vw; height: 55vh;"></div>
-                    <button data-option="2" id="b2">Option 2</button>
+                <div id="mly2" style="width: 45vw; height: 55vh;"></div>
+                <button data-option="2" id="b2">Option 2</button>
             </div>
         </div>
     </section>
@@ -92,11 +89,11 @@
     <section id="timer-game-view">
         <div id="timer-container"></div>
     </section>
-    
+
     <!-- Leaderboard view -->
     <section id="leaderboard-view" class="hidden">
         <h2>Leaderboard</h2>
-        <table>
+        <table id="leaderboard_table">
             <thead>
             <tr>
                 <th>Rank</th>
@@ -104,21 +101,35 @@
                 <th>Score</th>
             </tr>
             </thead>
-            <tbody id="leaderboard-table">
-            <!-- Table content  -->
-            </tbody>
+            <tbody id="leaderboard_tBody"></tbody>
         </table>
     </section>
 
     <!-- Login view -->
     <section id="login-view" class="hidden">
         <h2>Login</h2>
-        <form id="login-form">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required/>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required/>
+        <!-- action="/user" method="post" -->
+        <form id="login-form" action="">
+            <label for="username">Username:</label><input type="text" id="username" placeholder="Enter your username..." required/>
+            <label for="password">Password:</label><input type="password" id="password" placeholder="Enter your password..." required/>
+            <label for="countryCode">Country Code:</label><select id="countryCode" ></select>
             <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <!-- Profile view -->
+    <section id="profile-view" class="hidden">
+        <h2 id="profile_username">Username</h2>
+        <form id="profile_form" action="">
+            <label>Username: <label id="profile_form_username"></label></label>
+            <label>Password: <label id="profile_form_password">********</label></label>
+            <label>Highscore: <label id="profile_form_highscore">0</label></label>
+            <label for="profile_form_countryCode">Country Code: </label><select id="profile_form_countryCode"></select>
+            <label for="profile_form_maxRounds">Max Rounds: </label><input type="number" id="profile_form_maxRounds" placeholder="Enter max rounds" required>
+            <label for="profile_form_roundTime">Round Time: </label><input type="number" id="profile_form_roundTime" placeholder="Enter round time" required>
+            <label for="profile_form_roundTimeFast">Round Time Fast: </label><input type="number" id="profile_form_roundTimeFast" placeholder="Enter fast round time" required>
+            <button type="submit">Save</button>
+            <button id="profile_form_deleteAccount">Delete Account!</button>
         </form>
     </section>
 </main>

@@ -389,3 +389,15 @@ th {
         z-index: 9998;
         display: block;
 }
+
+/* profile view */
+#profile_form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 2rem auto;
+}
+
+#profile_deleteAccount {
+    color: red;
+}
