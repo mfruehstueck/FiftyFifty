@@ -3,3 +3,4 @@ package-lock.json
 dist/
 src/main.js
 src/main.js.LICENSE.txt
+log.log
